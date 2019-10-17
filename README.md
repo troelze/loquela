@@ -21,6 +21,10 @@
     pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
     postgres -V // Make sure it's running
     ```
+    - Create and populate tables:
+    ```
+    db-migrate up
+    ```
 
 ## Local Development
 - Pull in changes from master:
