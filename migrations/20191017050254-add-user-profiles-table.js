@@ -16,23 +16,43 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db, callback) {
   db.createTable('user_profiles', {
-      id: { type: 'int', primaryKey: true },
-      user_id: {
-          type: 'int',
-          references: { model: 'users', key: 'id' }
-      },
-      language: 'string',
-      topic: 'string',
-      created_at: {
-          type: 'timestamp',
-          notNull: true,
-          defaultValue: new String('CURRENT_TIMESTAMP')
-      }, 
-      updated_at: {
-          type: 'timestamp',
-          notNull: true,
-          defaultValue: new String('CURRENT_TIMESTAMP')
+    id: 
+    { 
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      primaryKey: true,
+      autoIncrement: true 
+    },
+    user_id: 
+    {
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      foreignKey: {
+        name: 'user_profiles_user_id_fk',
+        table: 'users',
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        },
+        mapping: 'id'
       }
+    },
+    language: 'string',
+    topic: 'string',
+    created_at: 
+    {
+      type: 'timestamp',
+      notNull: true,
+      defaultValue: new String('CURRENT_TIMESTAMP')
+    }, 
+    updated_at: 
+    {
+      type: 'timestamp',
+      notNull: true,
+      defaultValue: new String('CURRENT_TIMESTAMP')
+    }
   }, callback);
 };
 
@@ -41,5 +61,5 @@ exports.down = function(db, callback) {
 };
 
 exports._meta = {
-  "version": 1
+  'version': 1
 };

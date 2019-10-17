@@ -10,21 +10,33 @@
     ```
     npm install
     ```
-- Set up your local database. This will vary by operating system. For OsX:
-    - Install Homebrew if needed:
+- Set up your local database:
+    - Install and start up postgres. This will vary by operating system. I followed the instructions under "Installation" [here](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
     ```
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    - Create a default user:
     ```
-    - Install PostgreSQL if needed, and start it up with your computer:
+    psql postgres
+    CREATE ROLE me WITH LOGIN PASSWORD 'password';
+    ALTER ROLE me CREATEDB;
+    \q
     ```
-    brew install postgresql
-    pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
-    postgres -V // Make sure it's running
+    - Login as default user and create loquela db:
     ```
-    - Create and populate tables:
+    psql -d postgres -U me
+    CREATE DATABASE loquela;
+    \q
+    ```
+    - Create and populate tables from migration files:
     ```
     db-migrate up
     ```
+    - If you need to modify the tables, either change the migration file or create a new one (`db-migrate create my-title`).
+    Then drop and re-create the tables:
+    ```
+    db-migrate down
+    db-migrate up
+    ```
+    - It will probably help to download a database GUI of some sort. I downloaded Postico.
 
 ## Local Development
 - Pull in changes from master:

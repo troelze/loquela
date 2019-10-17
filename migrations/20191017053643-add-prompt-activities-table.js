@@ -16,27 +16,58 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db, callback) {
   db.createTable('prompt_activities', {
-      id: { type: 'int', primaryKey: true },
-      user_id: {
-          type: 'int',
-          references: { model: 'users', key: 'id' }
-      },
-      prompt_id: {
-          type: 'int',
-          references: { model: 'prompts', key: 'id' }
-      },
-      grade: 'string',
-      feedback_text: 'string',
-      created_at: {
-          type: 'timestamp',
-          notNull: true,
-          defaultValue: new String('CURRENT_TIMESTAMP')
-      }, 
-      updated_at: {
-          type: 'timestamp',
-          notNull: true,
-          defaultValue: new String('CURRENT_TIMESTAMP')
+    id: 
+    { 
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      primaryKey: true,
+      autoIncrement: true 
+    },
+    user_id: 
+    {
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      foreignKey: {
+        name: 'prompt_activities_user_id_fk',
+        table: 'users',
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        },
+        mapping: 'id'
       }
+    },
+    prompt_id: 
+    {
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      foreignKey: {
+        name: 'prompt_activities_prompt_id_fk',
+        table: 'prompts',
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        },
+        mapping: 'id'
+      }
+    },
+    grade: 'string',
+    feedback_text: 'string',
+    created_at: 
+    {
+      type: 'timestamp',
+      notNull: true,
+      defaultValue: new String('CURRENT_TIMESTAMP')
+    }, 
+    updated_at: 
+    {
+      type: 'timestamp',
+      notNull: true,
+      defaultValue: new String('CURRENT_TIMESTAMP')
+    }
   }, callback);
 };
 
@@ -45,5 +76,5 @@ exports.down = function(db, callback) {
 };
 
 exports._meta = {
-  "version": 1
+  'version': 1
 };
