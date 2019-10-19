@@ -11,6 +11,13 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 8080);
 
+// Use login.js to route as login page
+app.use('/login', require('./login.js'));
+// Use signup.js to route as signup page
+app.use('/signup', require('./signup.js'));
+// Use survey.js to route as signup page
+app.use('/survey', require('./survey.js'));
+
 // GET Homepage
 app.get('/', function(req, res) {
     context = {};
