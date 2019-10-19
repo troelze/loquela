@@ -65,6 +65,7 @@
 - Make changes as needed
 - Add, commit, push your changes
     ```
+    cd ../..
     git add .
     git status
     git commit -m "Your commit message"
