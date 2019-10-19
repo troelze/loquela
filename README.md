@@ -12,7 +12,6 @@
     ```
 - Set up your local database:
     - Install and start up postgres. This will vary by operating system. I followed the instructions under "Installation" [here](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
-    ```
     - Create a default user:
     ```
     psql postgres
