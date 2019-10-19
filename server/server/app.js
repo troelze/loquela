@@ -3,25 +3,18 @@ var express = require('express');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
 var body = require('body-parser');
-var db = require('../db/queries');
 
 app.use(body.urlencoded({extended: true}));
 app.use(body.json());
-app.use(express.static(__dirname + '../../client/public'));
+app.use(express.static('../../client/public'));
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', '../../client/views');
 app.set('port', 8080);
 
-// GET Homepage
-app.get('/', function(req, res) {
-    context = {};
-    db.getUsers.then(function(users) {
-        context.allUsers = users;
-        res.render('home', context);
-    });
-})
+// Use homepage.js to route as home page
+app.use('/', require('./homepage.js'));
 
 // Handle errors
 app.use(function(req, res) {
