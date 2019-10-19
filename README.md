@@ -35,7 +35,7 @@
     db-migrate reset
     db-migrate up
     ```
-    You can also use `db-migrate down` instead of `db-migrate reset` if you just want to undo the most recent migration.
+    - You can also use `db-migrate down` instead of `db-migrate reset` if you just want to undo the most recent migration.
     - It will probably help to download a database GUI of some sort. I downloaded Postico and set it up with the following credentials:
     ```
     Nickname: localhost
