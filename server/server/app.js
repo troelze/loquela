@@ -15,6 +15,12 @@ app.set('port', 8080);
 
 // Use homepage.js to route as home page
 app.use('/', require('./homepage.js'));
+// Use login.js to route as login page
+app.use('/login', require('./login.js'));
+// Use signup.js to route as signup page
+app.use('/signup', require('./signup.js'));
+// Use survey.js to route as signup page
+app.use('/survey', require('./survey.js'));
 
 // Handle errors
 app.use(function(req, res) {

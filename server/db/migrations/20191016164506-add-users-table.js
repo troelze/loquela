@@ -1,5 +1,8 @@
 'use strict';
 
+// Sources:
+// https://db-migrate.readthedocs.io/en/latest/API/SQL/
+// https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#reset
 var dbm;
 var type;
 var seed;
@@ -15,7 +18,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.createTable('answers', {
+  db.createTable('users', {
     id: 
     { 
       type: 'int',
@@ -24,37 +27,17 @@ exports.up = function(db, callback) {
       primaryKey: true,
       autoIncrement: true 
     },
-    user_id: 
+    email: 
     {
-      type: 'int',
-      unsigned: true,
+      type: 'string',
       notNull: true,
-      foreignKey: {
-        name: 'answers_user_id_fk',
-        table: 'users',
-        rules: {
-          onDelete: 'CASCADE',
-          onUpdate: 'RESTRICT'
-        },
-        mapping: 'id'
-      }
+      unique: true
     },
-    prompt_id: 
+    password_hash: 
     {
-      type: 'int',
-      unsigned: true,
-      notNull: true,
-      foreignKey: {
-        name: 'answers_prompt_id_fk',
-        table: 'prompts',
-        rules: {
-          onDelete: 'CASCADE',
-          onUpdate: 'RESTRICT'
-        },
-        mapping: 'id'
-      }
+      type: 'string',
+      notNull: true
     },
-    text: 'string',
     created_at: 
     {
       type: 'timestamp',
@@ -71,7 +54,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('answers', callback);
+  db.dropTable('users', callback);
 };
 
 exports._meta = {

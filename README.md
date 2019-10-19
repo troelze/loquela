@@ -12,7 +12,6 @@
     ```
 - Set up your local database:
     - Install and start up postgres. This will vary by operating system. I followed the instructions under "Installation" [here](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
-    ```
     - Create a default user:
     ```
     psql postgres
@@ -30,13 +29,21 @@
     ```
     db-migrate up
     ```
-    - If you need to modify the tables, either change the migration file or create a new one (`db-migrate create my-title`).
+    - If you need to modify the tables, either change the migration file or create a new one (`db-migrate create my-migration-title`).
     Then drop and re-create the tables:
     ```
-    db-migrate down
+    db-migrate reset
     db-migrate up
     ```
-    - It will probably help to download a database GUI of some sort. I downloaded Postico.
+    - You can also use `db-migrate down` instead of `db-migrate reset` if you just want to undo the most recent migration.
+    - It will probably help to download a database GUI of some sort. I downloaded Postico and set it up with the following credentials:
+    ```
+    Nickname: localhost
+    Host: localhost
+    Port: 5432
+    User: me
+    Database: postgres
+    ```
 
 ## Local Development
 - Pull in changes from master:
@@ -50,12 +57,14 @@
     ```
 - Start up the server:
     ```
+    cd server/server
     node app.js
     ```
 - Visit http://localhost:8080/ to see the site
 - Make changes as needed
 - Add, commit, push your changes
     ```
+    cd ../..
     git add .
     git status
     git commit -m "Your commit message"
