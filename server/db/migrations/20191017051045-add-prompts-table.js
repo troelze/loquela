@@ -1,5 +1,8 @@
 'use strict';
 
+// Sources:
+// https://db-migrate.readthedocs.io/en/latest/API/SQL/
+// https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#reset
 var dbm;
 var type;
 var seed;
@@ -15,7 +18,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.createTable('users', {
+  db.createTable('prompts', {
     id: 
     { 
       type: 'int',
@@ -24,17 +27,8 @@ exports.up = function(db, callback) {
       primaryKey: true,
       autoIncrement: true 
     },
-    email: 
-    {
-      type: 'string',
-      notNull: true,
-      unique: true
-    },
-    password_hash: 
-    {
-      type: 'string',
-      notNull: true
-    },
+    name: 'string',
+    text: 'string',
     created_at: 
     {
       type: 'timestamp',
@@ -51,7 +45,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('users', callback);
+  db.dropTable('prompts', callback);
 };
 
 exports._meta = {

@@ -1,5 +1,8 @@
 'use strict';
 
+// Sources:
+// https://db-migrate.readthedocs.io/en/latest/API/SQL/
+// https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#reset
 var dbm;
 var type;
 var seed;
@@ -15,7 +18,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.createTable('user_profiles', {
+  db.createTable('prompt_activities', {
     id: 
     { 
       type: 'int',
@@ -30,7 +33,7 @@ exports.up = function(db, callback) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'user_profiles_user_id_fk',
+        name: 'prompt_activities_user_id_fk',
         table: 'users',
         rules: {
           onDelete: 'CASCADE',
@@ -39,8 +42,24 @@ exports.up = function(db, callback) {
         mapping: 'id'
       }
     },
-    language: 'string',
-    topic: 'string',
+    prompt_id: 
+    {
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      foreignKey: {
+        name: 'prompt_activities_prompt_id_fk',
+        table: 'prompts',
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        },
+        mapping: 'id'
+      }
+    },
+    text: 'string',
+    grade: 'string',
+    feedback_text: 'string',
     created_at: 
     {
       type: 'timestamp',
@@ -57,7 +76,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('user_profiles', callback);
+  db.dropTable('prompt_activities', callback);
 };
 
 exports._meta = {
