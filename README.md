@@ -58,7 +58,11 @@
 - Start up the server:
     ```
     cd server/server
-    node app.js
+    nodemon app.js
+    ```
+- If you get some errors related to nodemon, just run the command below and try starting up the server again:
+    ```
+    npm install -g nodemon
     ```
 - Visit http://localhost:8080/ to see the site
 - Make changes as needed
