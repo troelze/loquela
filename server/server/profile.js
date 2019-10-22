@@ -2,18 +2,11 @@ module.exports = function() {
     var express = require('express');
     var router = express.Router();
     var db = require('../db/queries');
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1)
-    }
-
-    function getAvatarUrl(userId) {
-        var imageId = (userId % 5) + 1;
-        return '/images/' + imageId + '.png'
-    }
+    var helpers = require('./helpers');
 
     router.get('/', function(req, res) {
         var context = {};
+        // TODO: we'll need to get the ID based on who is logged in
         var userId = 1;
 
         db.getUserById(userId).then(function(userInfo) {
@@ -24,14 +17,23 @@ module.exports = function() {
             context.signup = formattedDate;
 
             db.getUserProfileByUserId(userId).then(function(userProfileInfo) {
-                context.language = capitalizeFirstLetter(userProfileInfo[0].language);
-                context.difficulty = capitalizeFirstLetter(userProfileInfo[0].difficulty);
-                context.topic = capitalizeFirstLetter(userProfileInfo[0].topic);
-                context.imageUrl = getAvatarUrl(userId);
+                context.language = helpers.capitalizeFirstLetter(userProfileInfo[0].language);
+                context.difficulty = helpers.capitalizeFirstLetter(userProfileInfo[0].difficulty);
+                context.topic = helpers.capitalizeFirstLetter(userProfileInfo[0].topic);
+                context.imageUrl = helpers.getAvatarUrl(userId);
 
                 res.render('profile', context);
             });
         });
+    });
+
+    router.get('/edit', function(req, res) {
+        res.render('edit-profile');
+        console.log('Entered /profile/edit');
+    });
+
+    router.post('/edit', function(req, res) {
+        res.redirect('profile');
     });
 
     return router;
