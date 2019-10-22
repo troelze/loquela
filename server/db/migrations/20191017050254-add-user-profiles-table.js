@@ -44,6 +44,7 @@ exports.up = function(db, callback) {
     },
     language: 'string',
     topic: 'string',
+    difficulty: 'string',
     created_at: 
     {
       type: 'timestamp',
