@@ -4,7 +4,6 @@
     <p>One user is: {{oneUser}}</p>
 
     <script>
-
         var recordedChunks = [];
 
         function handleDataAvailable(event) {
@@ -14,7 +13,7 @@
                 console.log(recordedChunks);
                 download();
             } else {
-                // ...
+            //
             }
         }
 
@@ -30,20 +29,15 @@
             a.download = "test.wav";
             a.click();
             window.URL.revokeObjectURL(url);
-}
-
-
-
+        }
 
         window.onload = async () => { 
-
             const constraints = {
                 audio: true
             }
-
             try {
-            stream = await navigator.mediaDevices.getUserMedia(constraints);
-            /* use the stream */
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                /* use the stream */
                 console.log(stream.getAudioTracks())
 
 
@@ -52,17 +46,16 @@
                 mediaRecorder.ondataavailable = handleDataAvailable;
                 mediaRecorder.start(1000);
 
-// demo: to download after 9sec
-setTimeout(event => {
-  console.log("stopping");
-  mediaRecorder.stop();
-}, 9000);
+                // demo: to download after 9sec
+                setTimeout(event => {
+                    console.log("stopping");
+                    mediaRecorder.stop();
+                }, 9000);
 
             } catch(err) {
             /* handle the error */
                 console.log(err)
             }
-
         }
     </script>
 </div>
