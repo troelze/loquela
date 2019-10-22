@@ -21,11 +21,11 @@ exports.setup = function(options, seedLink) {
 };
 
 var values = [
-  [1, 'Japanese', 'Art'],
-  [2, 'French', 'Politics'],
-  [3, 'Russian', 'Weather']
+  [1, 'japanese', 'art', 'beginner'],
+  [2, 'french', 'politics', 'intermediate'],
+  [3, 'russian', 'weather', 'advanced']
 ]
-var query = format('INSERT INTO user_profiles (user_id, language, topic) VALUES %L', values); 
+var query = format('INSERT INTO user_profiles (user_id, language, topic, difficulty) VALUES %L', values); 
 
 exports.up = async function(db, callback) {
   // We need to use pg-format and create a new connection here because otherwise there's

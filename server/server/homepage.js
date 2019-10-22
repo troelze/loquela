@@ -5,9 +5,12 @@ module.exports = function() {
 
     router.get('/', function(req, res) {
         var context = {};
-        db.getUsers.then(function(users) {
-            context.allUsers = users;
-            res.render('home', context);
+        db.getUsers().then(function(users) {
+            context.allUsers = JSON.stringify(users);
+            db.getUserById(1).then(function(user) {
+                context.oneUser = JSON.stringify(user)
+                res.render('home', context);
+            });
         });
     });
 

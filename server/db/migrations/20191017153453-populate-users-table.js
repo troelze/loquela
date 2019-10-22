@@ -21,11 +21,11 @@ exports.setup = function(options, seedLink) {
 };
 
 var values = [
-  ['lauren@test.com', '1234abcd'],
-  ['hudson@test.com', '1234abcd'],
-  ['tres@test.com', '1234abcd']
+  ['lauren', 'lauren@test.com', '1234abcd'],
+  ['hudson', 'hudson@test.com', '1234abcd'],
+  ['tres', 'tres@test.com', '1234abcd']
 ]
-var query = format('INSERT INTO users (email, password_hash) VALUES %L', values); 
+var query = format('INSERT INTO users (username, email, password_hash) VALUES %L', values); 
 
 exports.up = async function(db, callback) {
   // We need to use pg-format and create a new connection here because otherwise there's

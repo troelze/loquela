@@ -9,18 +9,32 @@ var pool = new Pool({
     port: credentials.port
 });
 
-var getUsers = new Promise(function(resolve, reject) {
-    pool.query('SELECT * FROM users', function(err, results) {
-        if (err) {
-            throw error;
-        }
-        resolve(JSON.stringify(results.rows));
-    })
-});
+var getUsers = function() {
+    return new Promise(function(resolve, reject) {
+        pool.query('SELECT * FROM users', function(err, results) {
+            if (err) {
+                throw error;
+            }
+            resolve(results.rows);
+        })
+    });
+}
+
+var getUserById = function(id) {
+    return new Promise(function(resolve, reject) {
+        pool.query('SELECT * FROM users WHERE id = $1', [id], function(err, results) {
+            if (err) {
+                throw error;
+            }
+            resolve(results.rows);
+        })
+    });
+}
 
 // Other queries go here
 
 // Export all query functions for user here
 module.exports = {
-    getUsers: getUsers
+    getUsers: getUsers,
+    getUserById: getUserById
 }

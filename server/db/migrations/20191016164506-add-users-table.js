@@ -33,6 +33,11 @@ exports.up = function(db, callback) {
       notNull: true,
       unique: true
     },
+    username:
+    {
+      type: 'string',
+      notNull: true
+    },
     password_hash: 
     {
       type: 'string',
