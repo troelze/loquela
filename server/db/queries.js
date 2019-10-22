@@ -31,10 +31,22 @@ var getUserById = function(id) {
     });
 }
 
+var getUserProfileByUserId = function(userId) {
+    return new Promise(function(resolve, reject) {
+        pool.query('SELECT * FROM user_profiles WHERE user_id = $1', [userId], function(err, results) {
+            if (err) {
+                throw error;
+            }
+            resolve(results.rows);
+        })
+    });
+}
+
 // Other queries go here
 
 // Export all query functions for user here
 module.exports = {
     getUsers: getUsers,
-    getUserById: getUserById
+    getUserById: getUserById,
+    getUserProfileByUserId: getUserProfileByUserId
 }
