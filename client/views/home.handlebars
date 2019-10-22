@@ -2,4 +2,67 @@
     <h1 class="text-center pt-5">I am the home page!</h1>
     <p>All users are: {{allUsers}}</p>
     <p>One user is: {{oneUser}}</p>
+
+    <script>
+
+        var recordedChunks = [];
+
+        function handleDataAvailable(event) {
+            console.log("data-available");
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+                console.log(recordedChunks);
+                download();
+            } else {
+                // ...
+            }
+        }
+
+        function download() {
+            var blob = new Blob(recordedChunks, {
+                type: "audio/wav"
+            });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = url;
+            a.download = "test.wav";
+            a.click();
+            window.URL.revokeObjectURL(url);
+}
+
+
+
+
+        window.onload = async () => { 
+
+            const constraints = {
+                audio: true
+            }
+
+            try {
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            /* use the stream */
+                console.log(stream.getAudioTracks())
+
+
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = handleDataAvailable;
+                mediaRecorder.start(1000);
+
+// demo: to download after 9sec
+setTimeout(event => {
+  console.log("stopping");
+  mediaRecorder.stop();
+}, 9000);
+
+            } catch(err) {
+            /* handle the error */
+                console.log(err)
+            }
+
+        }
+    </script>
 </div>

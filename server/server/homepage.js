@@ -14,5 +14,9 @@ module.exports = function() {
         });
     });
 
+    router.post('/audiofile', function(req, res) {
+        console.log(req); //TODO
+    });
+
     return router;
 }();
