@@ -37,7 +37,7 @@ exports.up = function(db, callback) {
     {
       type: 'string',
       notNull: true
-    }
+    },
     password_hash: 
     {
       type: 'string',
