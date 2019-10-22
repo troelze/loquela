@@ -11,6 +11,7 @@ module.exports = function() {
                 context.oneUser = JSON.stringify(user)
                 res.render('home', context);
             });
+            res.render('home', context);
         });
     });
 

@@ -21,6 +21,8 @@ app.use('/login', require('./login.js'));
 app.use('/signup', require('./signup.js'));
 // Use survey.js to route as signup page
 app.use('/survey', require('./survey.js'));
+// Use profile.js to route as profile page
+app.use('/profile', require('./profile.js'));
 
 // Handle errors
 app.use(function(req, res) {
