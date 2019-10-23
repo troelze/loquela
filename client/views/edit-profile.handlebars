@@ -1,0 +1,34 @@
+<div class="container pt-5">
+    <div class="row justify-content-center">
+        <img class="text-center" src={{imageUrl}} alt="Avatar" width="12%">
+    </div>
+    <form method="post" action="/profile/edit">
+        <div class="form-group row justify-content-center pt-5">
+            <label for="username" class="col-2 col-form-label">Username</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="inputUsername" name="username" value={{username}}>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center">
+            <label for="language" class="col-2 col-form-label">Language</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="inputLanguage" name="language" value={{language}}>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center">
+            <label for="difficulty" class="col-2 col-form-label">Difficulty</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="inputDifficulty" name="difficulty" value={{difficulty}}>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center">
+            <label for="topic" class="col-2 col-form-label">Topic</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="inputTopic" name="topic" value={{topic}}>
+            </div>
+        </div>
+        <div class="pt-3 text-center"> 
+            <button type="submit" class="btn btn-primary justify-content-center">Save Changes</button>
+        </div>
+    </form>
+</div>
