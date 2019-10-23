@@ -4,7 +4,7 @@ var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
 var body = require('body-parser');
 
-app.use(body.urlencoded({extended: true}));
+app.use(body.urlencoded({extended: false}));
 app.use(body.json());
 app.use(express.static('../../client/public'));
 
