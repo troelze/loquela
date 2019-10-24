@@ -44,7 +44,7 @@ function getUserProfileByUserId(userId) {
 
 function updateUserProfile(data) {
     return new Promise(function(resolve, reject) {
-        pool.query('UPDATE user_profiles SET language = $1, difficulty = $2, topic = $3 WHERE user_id = $4', 
+        pool.query('UPDATE user_profiles SET language = $1, difficulty = $2, topic = $3 WHERE user_id = $4',
           [data.language, data.difficulty, data.topic, data.userId], function(err, results) {
             if (err) {
                 console.log('Error:', err);
@@ -65,6 +65,18 @@ function updateUser(data) {
     })
 }
 
+function addUser(data) {
+  return new Promise(function(resolve, reject) {
+    pool.query('INSERT INTO users(email, username, password_hash) VALUES ($1, $2, $3)', [data.email, data.username, data.passone], function(err, results) {
+      if (err) {
+        console.log('Error:', err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    })
+  })
+}
 // Other queries go here
 
 // Export all query functions for user here
@@ -73,5 +85,6 @@ module.exports = {
     getUserById: getUserById,
     getUserProfileByUserId: getUserProfileByUserId,
     updateUserProfile: updateUserProfile,
-    updateUser: updateUser
+    updateUser: updateUser,
+    addUser: addUser
 }
