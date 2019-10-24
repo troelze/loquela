@@ -25,13 +25,13 @@ var values = [
   [2, 'french', 'politics', 'intermediate'],
   [3, 'russian', 'weather', 'advanced']
 ]
-var query = format('INSERT INTO user_profiles (user_id, language, topic, difficulty) VALUES %L', values); 
+var query = format('INSERT INTO user_profiles (user_id, language, topic, difficulty) VALUES %L', values);
 
 exports.up = async function(db, callback) {
   // We need to use pg-format and create a new connection here because otherwise there's
   // no support for inserting multiple values at once
   var client = new pg.Client({
-      connectionString: 'postgresql://localhost/loquela'
+      connectionString: 'postgres://me:password@localhost:5432/loquela'
   });
   client.connect().then(function() {
     client.query(query).then(function() {

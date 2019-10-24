@@ -4,7 +4,7 @@ var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
 var body = require('body-parser');
 
-app.use(body.urlencoded({extended: true}));
+app.use(body.urlencoded({extended: false}));
 app.use(body.json());
 app.use(express.static('../../client/public'));
 
@@ -21,6 +21,8 @@ app.use('/login', require('./login.js'));
 app.use('/signup', require('./signup.js'));
 // Use survey.js to route as signup page
 app.use('/survey', require('./survey.js'));
+// Use profile.js to route as profile page
+app.use('/profile', require('./profile.js'));
 
 // Handle errors
 app.use(function(req, res) {
