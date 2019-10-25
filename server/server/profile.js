@@ -10,14 +10,14 @@ module.exports = function() {
     function getProfileData(userId) {
         return new Promise(function(resolve, reject) {
             var context = {};
-        
+
             db.getUserById(userId).then(function(userInfo) {
                 context.username = userInfo[0].username;
                 context.email = userInfo[0].email;
                 signupDate = new Date(userInfo[0].created_at);
                 formattedDate = (signupDate.getMonth() + 1) + '-' + signupDate.getDate() + '-' + signupDate.getFullYear()
                 context.signup = formattedDate;
-    
+
                 db.getUserProfileByUserId(userId).then(function(userProfileInfo) {
                     context.language = helpers.capitalizeFirstLetter(userProfileInfo[0].language);
                     context.difficulty = helpers.capitalizeFirstLetter(userProfileInfo[0].difficulty);

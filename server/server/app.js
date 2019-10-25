@@ -21,10 +21,11 @@ app.use('/', require('./homepage.js'));
 app.use('/login', require('./login.js'));
 // Use signup.js to route as signup page
 app.use('/signup', require('./signup.js'));
-// Use survey.js to route as signup page
+// Use survey.js to route as survey page
 app.use('/survey', require('./survey.js'));
 // Use profile.js to route as profile page
 app.use('/profile', require('./profile.js'));
+
 
 //Logout Route
 app.get('/logout',function(req,res,next){

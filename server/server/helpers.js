@@ -31,6 +31,7 @@ function usernameCheck(content, username) {
   return true;
 }
 
+
 //Checks if request does not have an associated user
 function notLoggedIn(req) {
   return (!req.session.user);

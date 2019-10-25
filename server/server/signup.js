@@ -6,6 +6,7 @@ module.exports = function(){
   var crypto = require('crypto');
   const session = require('express-session');
 
+
   router.get('/', function(req, res){
     var context = {};
     if(helpers.notLoggedIn(req)) {

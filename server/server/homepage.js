@@ -5,6 +5,7 @@ module.exports = function() {
     var helpers = require('./helpers');
     const session = require('express-session');
 
+
     router.get('/', function(req, res) {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
