@@ -1,3 +1,7 @@
 .no-pad {
   display: inline;
 }
+
+.surveySelect {
+  width: 300px;
+}

@@ -4,12 +4,13 @@ module.exports = function(){
   var db = require('../db/queries.js');
   var helpers = require('./helpers');
   var crypto = require('crypto');
+  const session = require('express-session');
 
 
   router.get('/', function(req, res){
     var context = {};
     if(helpers.notLoggedIn(req)) {
-      res.render("signup", context);
+      res.render('signup', context);
     } else {
       context = {};
       context.username = req.session.user.username;
@@ -26,10 +27,10 @@ module.exports = function(){
         const hash = crypto.createHash('sha256');
         hash.update(req.body.passone);
         req.body.passone = (hash.digest('hex'));
-        //Add user info to to database
+        //Add user info to to database and redirect to survey page
         db.addUser(req.body).then(
             function(content2) {
-              res.redirect('/login');
+              res.redirect('/survey');
             },
             function(err) {
               console.log(err);

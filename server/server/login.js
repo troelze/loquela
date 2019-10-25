@@ -4,10 +4,17 @@ module.exports = function(){
   var db = require('../db/queries.js');
   var helpers = require('./helpers');
   const crypto = require('crypto');
+  const session = require('express-session');
+
 
   router.get('/', function(req, res){
-    var context = {};
-    res.render('login', context);
+    if(helpers.notLoggedIn(req)) {
+      res.render('login');
+    } else {
+      var context = {};
+      context.username = req.session.user.username;
+      res.render('logout', context);
+    }
   });
 
   router.post('/', function(req, res) {

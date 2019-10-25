@@ -26,7 +26,8 @@ app.use('/survey', require('./survey.js'));
 // Use profile.js to route as profile page
 app.use('/profile', require('./profile.js'));
 
-//Logout
+
+//Logout Route
 app.get('/logout',function(req,res,next){
   req.session.user = false;
   req.session.destroy();
