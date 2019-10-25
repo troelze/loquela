@@ -5,3 +5,6 @@
 .surveySelect {
   width: 300px;
 }
+.round {
+    border-radius: 25%;
+}
