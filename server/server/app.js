@@ -3,7 +3,9 @@ var express = require('express');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
 var body = require('body-parser');
+const session = require('express-session');
 
+app.use(session({secret:'SuperSecretRandomPassword', resave: true, saveUninitialized: true}));
 app.use(body.urlencoded({extended: false}));
 app.use(body.json());
 app.use(express.static('../../client/public'));
@@ -23,6 +25,13 @@ app.use('/signup', require('./signup.js'));
 app.use('/survey', require('./survey.js'));
 // Use profile.js to route as profile page
 app.use('/profile', require('./profile.js'));
+
+//Logout Route
+app.get('/logout',function(req,res,next){
+  req.session.user = false;
+  req.session.destroy();
+  res.redirect('/');
+});
 
 // Handle errors
 app.use(function(req, res) {

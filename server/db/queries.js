@@ -77,6 +77,18 @@ function addUser(data) {
     })
   })
 }
+
+function addUserProfile(data) {
+    return new Promise(function(resolve, reject) {
+        pool.query('INSERT INTO user_profiles(user_id, language, difficulty, topic) VALUES ($1, $2, $3, $4)',
+          [data.userId, data.language, data.difficulty, data.topic], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            resolve(results.rows);
+        })
+    })
+}
 // Other queries go here
 
 // Export all query functions for user here
@@ -86,5 +98,6 @@ module.exports = {
     getUserProfileByUserId: getUserProfileByUserId,
     updateUserProfile: updateUserProfile,
     updateUser: updateUser,
-    addUser: addUser
+    addUser: addUser,
+    addUserProfile: addUserProfile
 }
