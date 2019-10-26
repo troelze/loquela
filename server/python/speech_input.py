@@ -31,7 +31,7 @@ def read_in_speech(recognizer, microphone):
     # If not, record the error
     # TODO: Can pass the language code here based on user's language setting. See all codes here: https://stackoverflow.com/questions/14257598/what-are-language-codes-in-chromes-implementation-of-the-html5-speech-recogniti/14302134#14302134
     try:
-        response['transcription'] = recognizer.recognize_google(audio, language='es-MX')
+        response['transcription'] = recognizer.recognize_google(audio, language='en-US')
     except sr.RequestError:
         # API was unreachable/unresponsive
         response['success'] = False
@@ -42,16 +42,19 @@ def read_in_speech(recognizer, microphone):
 
     return response
 
-if __name__ == '__main__':
+def main():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
-    print('Say something!')
+    # print('Say something!')
     speech = read_in_speech(recognizer, microphone)
     
     if speech['error'] or not speech['success']:
+        # print('ERROR: {}'.format(speech['error']))
         print('ERROR: {}'.format(speech['error']))
 
     # show the user the transcription
     else:
         print('You said: {}'.format(speech['transcription']))
+
+main()
