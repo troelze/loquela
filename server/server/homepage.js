@@ -16,7 +16,7 @@ module.exports = function() {
               context.allUsers = JSON.stringify(users);
               //Using express-sessions to get user.id
               db.getUserById(req.session.user.id).then(function(user) {
-                  context.oneUser = JSON.stringify(user)
+                  context.oneUser = JSON.stringify(user);
                   res.render('home', context);
               });
           });
