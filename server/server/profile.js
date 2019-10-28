@@ -5,9 +5,6 @@ module.exports = function() {
     var helpers = require('./helpers');
     let {PythonShell} = require('python-shell');
 
-    // TODO: we'll need to get the ID based on who is logged in
-    var userId = 1;
-
     function getProfileData(userId) {
         return new Promise(function(resolve, reject) {
             var context = {};
