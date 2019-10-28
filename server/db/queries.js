@@ -91,6 +91,31 @@ function addUserProfile(data) {
 }
 // Other queries go here
 
+function getPromptsByLanguage(data) {
+    return new Promise(function(resolve, reject) {
+        pool.query('SELECT * FROM prompts WHERE language = $1', [data.language], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            resolve(results.rows);
+        })
+    });
+}
+
+
+
+// function PromptbyID(id) {
+//     return new Promise(function(resolve, reject) {
+//         pool.query('SELECT * FROM users WHERE id = $1', [id], function(err, results) {
+//             if (err) {
+//                 console.log('Error:', err);
+//             }
+//             resolve(results.rows);
+//         })
+//     });
+// }
+
+
 // Export all query functions for user here
 module.exports = {
     getUsers: getUsers,

@@ -21,9 +21,18 @@ exports.setup = function(options, seedLink) {
 };
 
 var values = [
-  ['Prompt 1', 'I am prompt 1.']
+  ['Prompt 1', 'I am prompt 1.', 'japanese'],
+  ['Prompt 2', 'I am prompt 2.', 'french'],
+  ['Prompt 3', 'I am prompt 3.', 'russian'],
+  ['Prompt 4', 'I am prompt 4.', 'japanese'],
+  ['Prompt 5', 'I am prompt 5.', 'french'],
+  ['Prompt 6', 'I am prompt 6.', 'russian'],
+  ['Prompt 7', 'I am prompt 7.', 'japanese'],
+  ['Prompt 8', 'I am prompt 8.', 'french'],
+  ['Prompt 9', 'I am prompt 9.', 'russian']
+
 ]
-var query = format('INSERT INTO prompts (name, text) VALUES %L', values);
+var query = format('INSERT INTO prompts (name, text, language) VALUES %L', values);
 
 exports.up = async function(db, callback) {
   // We need to use pg-format and create a new connection here because otherwise there's

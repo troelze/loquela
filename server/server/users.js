@@ -14,7 +14,7 @@ module.exports = function() {
           var context = {};
           db.getUsers().then(function(users) {
             context.allUsers =  users;
-            console.log(users);
+         
             res.render('users', context);
             
           });
