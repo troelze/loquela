@@ -93,12 +93,12 @@ function addUserProfile(data) {
 
 function getPromptsByLanguage(data) {
     return new Promise(function(resolve, reject) {
-        pool.query('SELECT * FROM prompts WHERE language = $1', [data.language], function(err, results) {
+        pool.query('SELECT * FROM prompts WHERE language = $1', [data], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
+        });
     });
 }
 
@@ -124,5 +124,6 @@ module.exports = {
     updateUserProfile: updateUserProfile,
     updateUser: updateUser,
     addUser: addUser,
-    addUserProfile: addUserProfile
+    addUserProfile: addUserProfile,
+    getPromptsByLanguage: getPromptsByLanguage
 };

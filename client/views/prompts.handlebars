@@ -1,22 +1,24 @@
 <div class="container ">
     <h1 class="text-center pt-5">Prompts</h1>
-    <a class="btn btn-primary btn-circle btn-circle-lg m-1" href="/" ><i class="fa fa-home"></i></a>   
+    <a class="btn btn-primary btn-circle btn-circle-lg m-1" href="/" ><i class="fa fa-home"></i></a> 
+    
     <table class="table">
         <thead> 
             <th>Name</th> 
             <th>Text</th> 
         </thead> 
         <tbody> 
-            {{!-- {{#each userPrompt}} 
+            {{#each prompts}} 
             <tr> 
-                <td>{{language}}</td> 
+                <td>{{name}}</td> 
                 <td>{{text}}</td> 
             </tr> 
-            {{/each}}  --}}
+            {{/each}} 
         </tbody> 
-    </table>  
+    </table> 
+    <h5>Current Language:  {{language}}</h5>   
 
-    {{language}}
+   
 
     
 </div>

@@ -17,8 +17,14 @@ module.exports = function() {
                         context.language = helpers.capitalizeFirstLetter(userProfileInfo[0].language);
                         context.difficulty = helpers.capitalizeFirstLetter(userProfileInfo[0].difficulty);
                         context.topic = helpers.capitalizeFirstLetter(userProfileInfo[0].topic);
+
+                        db.getPromptsByLanguage(userProfileInfo[0].language).then(function(userPrompts) {
+                          context.prompts = userPrompts;
+                          resolve(context);
+                        });
+                        
                     }
-                    resolve(context);
+                    
                 });
             });
         });
