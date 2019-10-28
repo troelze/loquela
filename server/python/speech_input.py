@@ -18,7 +18,7 @@ def read_in_speech(recognizer, microphone):
     # TODO: Should look into `listen_in_background` for continuous recording:
     # https://github.com/Uberi/speech_recognition/blob/3.8.1/reference/library-reference.rst#recognizer_instancelisten_in_backgroundsource-audiosource-callback-callablerecognizer-audiodata-any---callablebool-none
     with microphone as source:
-        recognizer.adjust_for_ambient_noise(source)
+        # recognizer.adjust_for_ambient_noise(source)
         audio = recognizer.listen(source)
 
     response = {
