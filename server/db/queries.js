@@ -16,7 +16,7 @@ function getUsers() {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
+        });
     });
 }
 
@@ -27,7 +27,7 @@ function getUserById(id) {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
+        });
     });
 }
 
@@ -38,20 +38,20 @@ function getUserProfileByUserId(userId) {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
+        });
     });
 }
 
 function updateUserProfile(data) {
     return new Promise(function(resolve, reject) {
         pool.query('UPDATE user_profiles SET language = $1, difficulty = $2, topic = $3 WHERE user_id = $4',
-          [data.language, data.difficulty, data.topic, data.userId], function(err, results) {
+          [data.language.toLowerCase(), data.difficulty.toLowerCase(), data.topic.toLowerCase(), data.userId], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
-    })
+        });
+    });
 }
 
 function updateUser(data) {
@@ -61,8 +61,8 @@ function updateUser(data) {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
-    })
+        });
+    });
 }
 
 function addUser(data) {
@@ -74,20 +74,20 @@ function addUser(data) {
       } else {
         resolve();
       }
-    })
-  })
+    });
+  });
 }
 
 function addUserProfile(data) {
     return new Promise(function(resolve, reject) {
         pool.query('INSERT INTO user_profiles(user_id, language, difficulty, topic) VALUES ($1, $2, $3, $4)',
-          [data.userId, data.language, data.difficulty, data.topic], function(err, results) {
+          [data.userId, data.language.toLowerCase(), data.difficulty.toLowerCase(), data.topic.toLowerCase()], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
             resolve(results.rows);
-        })
-    })
+        });
+    });
 }
 // Other queries go here
 
@@ -100,4 +100,4 @@ module.exports = {
     updateUser: updateUser,
     addUser: addUser,
     addUserProfile: addUserProfile
-}
+};

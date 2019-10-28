@@ -30,6 +30,13 @@ module.exports = function() {
         });
     }
 
+    function updateProfile(user, data) {
+        if (user.length != 0) {
+            return db.updateUserProfile(data);
+        }
+        return db.addUserProfile(data);
+    }
+
     router.get('/', function(req, res) {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
@@ -46,15 +53,16 @@ module.exports = function() {
         });
     });
 
-    // Note: This route assumes you will always have a user profile entry (via /survey)
-    // before being able to update your profile
     router.post('/edit', function(req, res) {
         data = req.body;
         data.userId = req.session.user.id;
 
-        db.updateUserProfile(data).then(function() {
-            db.updateUser(data).then(function() {
-                res.redirect('../profile');
+        // Update the profile if it already exists, otherwise create a new one
+        db.getUserProfileByUserId(data.userId).then(function(user) {
+            updateProfile(user, data).then(function() {
+                db.updateUser(data).then(function() {
+                    res.redirect('../profile');
+                });
             });
         });
     });
