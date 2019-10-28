@@ -13,18 +13,14 @@ module.exports = function() {
         else {
           var context = {};
           db.getUsers().then(function(users) {
-              context.allUsers = JSON.stringify(users);
-              //Using express-sessions to get user.id
-                  context.oneUser = req.session.user.username;
-                  res.render('home', context);
-              
+            context.allUsers =  users;
+            console.log(users);
+            res.render('users', context);
+            
           });
         }
       });
 
-    router.post('/audiofile', function(req, res) {
-        console.log(req); //TODO
-    });
 
     return router;
 }();

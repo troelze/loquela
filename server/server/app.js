@@ -25,6 +25,8 @@ app.use('/signup', require('./signup.js'));
 app.use('/survey', require('./survey.js'));
 // Use profile.js to route as profile page
 app.use('/profile', require('./profile.js'));
+// Use users.js to route as users page
+app.use('/users', require('./users.js'));
 
 
 //Logout Route
