@@ -44,6 +44,22 @@
     User: me
     Database: postgres
     ```
+- Set up python dependencies:
+    - These instructions assume you're using python 3.3+ so you may need to install that.
+    - Install SpeechRecognition and check that it worked by printing it's version number:
+        ```
+        pip install SpeechRecognition
+        python
+        import speech_recognition as sr
+        sr.__version__
+        exit()
+        ```
+    - Install and test out PyAudio:
+        ```
+        pip install pyaudio
+        python -m speech_recognition
+        ```
+
 
 ## Local Development
 - Pull in changes from master:
