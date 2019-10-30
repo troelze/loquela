@@ -43,7 +43,7 @@ module.exports = function() {
                 context.microphone = req.query.microphone ? 'icon-circle' : 'icon-microphone';
                 if (req.query.microphone) {
                     // Source: https://medium.com/@HolmesLaurence/integrating-node-and-python-6b8454bfc272
-                    var options = {};
+                    var options = {args: [helpers.languageToCode(context.language.toLowerCase())]};
                     PythonShell.run('../python/speech_input.py', options, function(err, data) {
                         if (err) {
                             console.log('Error:', err);

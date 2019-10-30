@@ -3,12 +3,14 @@
 # we are limited to 50 requests per day with this key
 import speech_recognition as sr
 import time
+import sys
+
+languageArg = sys.argv[1]
 
 def callback(recognizer, audio):
     # Try to recognize speech input, otherwise send back a relevant error
-    # TODO: Can pass the language code here based on user's language setting. See all codes here: https://stackoverflow.com/questions/14257598/what-are-language-codes-in-chromes-implementation-of-the-html5-speech-recogniti/14302134#14302134
     try:
-        print(recognizer.recognize_google(audio, language='en-US'))
+        print(recognizer.recognize_google(audio, language=languageArg))
     except sr.RequestError:
         # API was unreachable/unresponsive
         print('API unavailable')
@@ -26,7 +28,7 @@ def main():
     stop_listening = recognizer.listen_in_background(microphone, callback)
 
     # TODO: update this so that it sleeps until sigint sent
-    for _ in range(100): time.sleep(0.1)
+    for _ in range(50): time.sleep(0.1)
 
     stop_listening(wait_for_stop=False)
 
