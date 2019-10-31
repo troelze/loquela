@@ -21,7 +21,7 @@ exports.setup = function(options, seedLink) {
 };
 
 var values = [
-  ['Prompt 1', 'I am prompt 1.', 'japanese'],
+  ['Prompt 1', 'Describe the weather today.', 'english'],
   ['Prompt 2', 'I am prompt 2.', 'french'],
   ['Prompt 3', 'I am prompt 3.', 'russian'],
   ['Prompt 4', 'I am prompt 4.', 'japanese'],

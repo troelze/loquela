@@ -22,13 +22,13 @@ def main():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
-    with microphone as source:
-        recognizer.adjust_for_ambient_noise(source, duration=0.5)
+    # with microphone as source:
+    #     recognizer.adjust_for_ambient_noise(source, duration=0.5)
 
     stop_listening = recognizer.listen_in_background(microphone, callback)
 
     # TODO: update this so that it sleeps until sigint sent
-    for _ in range(50): time.sleep(0.1)
+    for _ in range(100): time.sleep(0.1)
 
     stop_listening(wait_for_stop=False)
 

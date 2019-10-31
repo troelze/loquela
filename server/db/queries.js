@@ -102,6 +102,18 @@ function getPromptsByLanguage(data) {
     });
 }
 
+function updatePromptActivities(data) {
+    return new Promise(function(resolve, reject) {
+        pool.query('INSERT INTO prompt_activities(user_id, prompt_id, text) VALUES ($1, $2, $3)',
+          [data.userId, data.promptId, data.text], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            resolve(results.rows);
+        });
+    });
+}
+
 
 
 // function PromptbyID(id) {
@@ -125,5 +137,6 @@ module.exports = {
     updateUser: updateUser,
     addUser: addUser,
     addUserProfile: addUserProfile,
-    getPromptsByLanguage: getPromptsByLanguage
+    getPromptsByLanguage: getPromptsByLanguage,
+    updatePromptActivities: updatePromptActivities
 };
