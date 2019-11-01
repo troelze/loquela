@@ -88,7 +88,6 @@ module.exports = function() {
                         res.redirect('../prompts');
                     } else {
                         context.speechAsTextClass = 'hidden';
-                        context.microphone = req.query.microphone ? 'icon-circle' : 'icon-microphone';
                         
                         // If they're currently recording, connect to python script 
                         // to read in their speech and display what they said
