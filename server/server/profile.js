@@ -3,13 +3,13 @@ module.exports = function() {
     var router = express.Router();
     var db = require('../db/queries');
     var helpers = require('./helpers');
-    var session = require('express-session');
 
     function getProfileData(userId) {
         return new Promise(function(resolve, reject) {
             var context = {};
 
             db.getUserById(userId).then(function(userInfo) {
+                context.userId = userId;
                 context.username = userInfo[0].username;
                 context.email = userInfo[0].email;
                 signupDate = new Date(userInfo[0].created_at);
@@ -17,11 +17,9 @@ module.exports = function() {
                 context.signup = formattedDate;
 
                 db.getUserProfileByUserId(userId).then(function(userProfileInfo) {
-                    if (userProfileInfo[0]) {
-                        context.language = helpers.capitalizeFirstLetter(userProfileInfo[0].language);
-                        context.difficulty = helpers.capitalizeFirstLetter(userProfileInfo[0].difficulty);
-                        context.topic = helpers.capitalizeFirstLetter(userProfileInfo[0].topic);
-                    }
+                    context.language = helpers.capitalizeFirstLetter(userProfileInfo[0].language);
+                    context.difficulty = helpers.capitalizeFirstLetter(userProfileInfo[0].difficulty);
+                    context.topic = helpers.capitalizeFirstLetter(userProfileInfo[0].topic);
                     context.imageUrl = helpers.getAvatarUrl(userId);
 
                     resolve(context);
@@ -39,12 +37,12 @@ module.exports = function() {
 
     router.get('/', function(req, res) {
         if(helpers.notLoggedIn(req)) {
-          res.render('login');
+            res.render('login');
         } else {
-          getProfileData(req.session.user.id).then(function(context) {
-              res.render('profile', context);
-          });
-      }
+            getProfileData(req.session.user.id).then(function(context) {
+                res.render('profile', context);
+            });
+        }
     });
 
     router.get('/edit', function(req, res) {
@@ -69,3 +67,4 @@ module.exports = function() {
 
     return router;
 }();
+ 

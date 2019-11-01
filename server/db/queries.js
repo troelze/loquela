@@ -89,7 +89,6 @@ function addUserProfile(data) {
         });
     });
 }
-// Other queries go here
 
 function getPromptsByLanguage(data) {
     return new Promise(function(resolve, reject) {
@@ -102,19 +101,28 @@ function getPromptsByLanguage(data) {
     });
 }
 
+function getPromptById(promptId) {
+    return new Promise(function(resolve, reject) {
+        pool.query('SELECT * FROM prompts WHERE id = $1', [parseInt(promptId)], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            resolve(results.rows[0]);
+        });
+    });
+}
 
-
-// function PromptbyID(id) {
-//     return new Promise(function(resolve, reject) {
-//         pool.query('SELECT * FROM users WHERE id = $1', [id], function(err, results) {
-//             if (err) {
-//                 console.log('Error:', err);
-//             }
-//             resolve(results.rows);
-//         })
-//     });
-// }
-
+function updatePromptActivities(data) {
+    return new Promise(function(resolve, reject) {
+        pool.query('INSERT INTO prompt_activities(user_id, prompt_id, text) VALUES ($1, $2, $3)',
+          [data.userId, data.promptId, data.text], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            resolve(results.rows);
+        });
+    });
+}
 
 // Export all query functions for user here
 module.exports = {
@@ -125,5 +133,7 @@ module.exports = {
     updateUser: updateUser,
     addUser: addUser,
     addUserProfile: addUserProfile,
-    getPromptsByLanguage: getPromptsByLanguage
+    getPromptsByLanguage: getPromptsByLanguage,
+    updatePromptActivities: updatePromptActivities,
+    getPromptById: getPromptById
 };

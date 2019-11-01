@@ -6,3 +6,14 @@
   width: 300px;
 }
 
+.round {
+    border-radius: 25%;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
