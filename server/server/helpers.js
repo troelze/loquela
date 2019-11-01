@@ -1,3 +1,5 @@
+var db = require('../db/queries');
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -34,6 +36,20 @@ function usernameCheck(content, username) {
 //Checks if request does not have an associated user
 function notLoggedIn(req) {
   return (!req.session.user);
+}
+
+// Because this helper is querying the database and returning a promise, it needs to be called like:
+// `helpers.getUserLanguage(userId).then(function(language) { // do stuff with language }`
+function getUserLanguage(userId) {
+    return new Promise(function(resolve, reject) {
+        db.getUserProfileByUserId(userId).then(function(userProfileInfo) {
+            if (userProfileInfo) {
+                resolve(userProfileInfo[0].language);
+            } else {
+                resolve('Unknown');
+            }
+        });
+    });
 }
 
 function languageToCode(language) {
@@ -113,5 +129,6 @@ module.exports = {
     loginCheck: loginCheck,
     usernameCheck: usernameCheck,
     notLoggedIn: notLoggedIn,
-    languageToCode: languageToCode
+    languageToCode: languageToCode,
+    getUserLanguage: getUserLanguage
 };
