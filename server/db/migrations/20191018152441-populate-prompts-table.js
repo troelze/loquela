@@ -28,9 +28,7 @@ var values = [
   ['Prompt 5', 'I am prompt 5.', 'french'],
   ['Prompt 6', 'I am prompt 6.', 'russian'],
   ['Prompt 7', 'I am prompt 7.', 'japanese'],
-  ['Prompt 8', 'I am prompt 8.', 'french'],
-  ['Prompt 9', 'I am prompt 9.', 'russian']
-
+  ['Prompt 8', 'I am prompt 8.', 'french']
 ]
 var query = format('INSERT INTO prompts (name, text, language) VALUES %L', values);
 
