@@ -1,4 +1,6 @@
 // Source: CS290 coursework
+
+var PORT = process.env.PORT || 8080;
 var express = require('express');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
@@ -13,7 +15,7 @@ app.use(express.static('../../client/public'));
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', '../../client/views');
-app.set('port', 8080);
+app.set('port', PORT);
 
 // Use homepage.js to route as home page
 app.use('/', require('./homepage.js'));
