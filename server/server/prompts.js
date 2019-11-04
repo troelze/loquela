@@ -17,7 +17,7 @@ module.exports = function() {
                 db.getPromptsByLanguage(language).then(function(userPrompts) {
                     context.prompts = userPrompts;
                     resolve(context);
-                });                        
+                });
             });
         });
     }
@@ -82,14 +82,14 @@ module.exports = function() {
             helpers.getUserLanguage(req.session.user.id).then(function(language) {
                 getIndividualPrompt(req.params.id).then(function(context) {
                     context.userId = req.session.user.id;
-                    
+
                     // Re-route to /prompts page if this specific prompt is not for the user's language
                     if (context.language != language) {
                         res.redirect('../prompts');
                     } else {
                         context.speechAsTextClass = 'hidden';
-                        
-                        // If they're currently recording, connect to python script 
+
+                        // If they're currently recording, connect to python script
                         // to read in their speech and display what they said
                         if (req.query.microphone) {
                             connectToSpeechRecognition(context, req.params.id).then(function(context) {
