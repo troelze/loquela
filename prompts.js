@@ -1,7 +1,7 @@
 module.exports = function() {
     var express = require('express');
     var router = express.Router();
-    var db = require('../db/queries');
+    var db = require(__dirname + '/db/queries');
     var helpers = require('./helpers');
     const session = require('express-session');
     let {PythonShell} = require('python-shell');
@@ -39,8 +39,8 @@ module.exports = function() {
     function connectToSpeechRecognition(context, promptId, speechFile) {
         return new Promise(function(resolve, reject) {
             // Source: https://medium.com/@HolmesLaurence/integrating-node-and-python-6b8454bfc272
-            var options = {args: [helpers.languageToCode(context.language.toLowerCase()), speechFile]};
-            PythonShell.run('../python/speech_input.py', options, function(err, data) {
+            var options = {args: [helpers.languageToCode(context.language.toLowerCase())]};
+            PythonShell.run(__dirname + '/python/speech_input.py', options, function(err, data) {
                 if (err) {
                     console.log('Error:', err);
                 } else {
