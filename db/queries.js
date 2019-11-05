@@ -1,10 +1,15 @@
 // Source: https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
 
+require('dotenv').config();
+console.log('Your environment variable DATABASE_URL has the value: ', process.env.DATABASE_URL);
+
+
 const { Client } = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  ssl: true,
+  ssl:false,
+  //ssl: true, //when push to remote must be true! 
 });
 
 client.connect();
