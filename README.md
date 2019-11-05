@@ -95,3 +95,19 @@
     - Look over the files changed and add any necessary comments
     - Submit the request
 - Either ask someone to review it or just approve the pull request from the master branch
+
+## Heroku & New Way to Locally Develop
+- Download Heroku CLI : 
+    - Go to https://devcenter.heroku.com/articles/heroku-cli
+    - Create a Heroku account, I will add you as a collaborator and you'll be able to access my heroku repo
+- Follow instructions for local Dev: 
+    - https://devcenter.heroku.com/articles/heroku-local
+    - Once you're connected to https://git.heroku.com/loquela-learning.git
+    - You will need to change `ssl: true` on line #12 in queries.js to `ssl: false` so that the app will use your local postgres db
+    - You will also need to create a `.env` file in the root directory in order to change the environment variable which is the name of your database on your local machine. Example:   `DATABASE_URL='postgres://me:password@localhost:5432/loquela'`
+    - That is it! The app will run on Port 5000, I believe since the environment var is 5000 by default. You could in theory change this in .env, though, or make it 8080 on line #3 of app.js
+    ```
+    heroku local
+    ```
+
+
