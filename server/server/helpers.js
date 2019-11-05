@@ -33,6 +33,17 @@ function usernameCheck(content, username) {
   return true;
 }
 
+//Helper function to check if email already exists in database
+function emailCheck(content, email) {
+  var i;
+  for(i=0; i < content.length; i++) {
+    if(content[i].email === email) {
+      return false;
+    }
+  }
+  return true;
+}
+
 //Checks if request does not have an associated user
 function notLoggedIn(req) {
   return (!req.session.user);
@@ -128,6 +139,7 @@ module.exports = {
     getAvatarUrl: getAvatarUrl,
     loginCheck: loginCheck,
     usernameCheck: usernameCheck,
+    emailCheck: emailCheck,
     notLoggedIn: notLoggedIn,
     languageToCode: languageToCode,
     getUserLanguage: getUserLanguage

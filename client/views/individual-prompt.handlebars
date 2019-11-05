@@ -5,9 +5,18 @@
     <br>
     <br>
     <div class="text-center">
-        <a href="?microphone=true"><button type="button" class="btn btn-secondary p-3 round"><i class="icon-microphone icon-3x"></i></button></a>
+        <button class="btn btn-primary" id="microphone-start"><i class="icon-microphone icon-3x"></i></button>
+        <button class="btn btn-danger" id="microphone-stop"><i class="icon-circle icon-3x"></i></button>
         <br>
         <br>
-        <p class="{{speechAsTextClass}}">You said: {{speechAsText}}</p>
+        <section id="sound-clips">
+        </section>
+        <br>
+        <form method="POST" action="/prompts/{{promptId}}">
+            <input type="hidden" id="speech-input" name="speechSubmission"></input>
+            <button type="submit" class="btn btn-secondary hidden" id="submit-speech">Submit Response</button>
+        </form>
     </div>
 </div>
+
+<script src="/scripts/microphone-scripts.js"></script>
