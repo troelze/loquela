@@ -5,7 +5,6 @@ module.exports = function() {
     var helpers = require('./helpers');
     const session = require('express-session');
 
-
     router.get('/', function(req, res) {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
@@ -17,7 +16,7 @@ module.exports = function() {
               //Using express-sessions to get user.id
                   context.oneUser = req.session.user.username;
                   res.render('home', context);
-              
+
           });
         }
       });

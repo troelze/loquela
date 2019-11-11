@@ -134,6 +134,45 @@ function languageToCode(language) {
     return languageDict[language];
 }
 
+function promptFeedback(submission, target) {
+  //Check if Noun and Adjective are present in speechText
+  var feedback = {};
+  if(submission.includes(target)) {
+    feedback["text"] = "Great Work! " + target + " was detected in your response! ";
+    feedback["grade"] = 100;
+  }
+  else {
+    feedback["text"] = target + " was not detected in your response. ";
+    feedback["grade"] = 0;
+  }
+  return feedback;
+}
+
+function averageGrade(grades) {
+  var sum = 0;
+  var letterGrade = "";
+  for(var i = 0; i < grades.length; i++) {
+    sum += grades[i];
+  }
+  var avg = sum / grades.length;
+  if(avg > 89) {
+    letterGrade = "A";
+  }
+  else if (avg > 79) {
+    letterGrade = "B";
+  }
+  else if (avg > 69) {
+    letterGrade = "C";
+  }
+  else if (avg >59) {
+    letterGrade = "D";
+  }
+  else {
+    letterGrade = "F";
+  }
+  return letterGrade;
+}
+
 module.exports = {
     capitalizeFirstLetter: capitalizeFirstLetter,
     getAvatarUrl: getAvatarUrl,
@@ -142,5 +181,7 @@ module.exports = {
     emailCheck: emailCheck,
     notLoggedIn: notLoggedIn,
     languageToCode: languageToCode,
-    getUserLanguage: getUserLanguage
+    getUserLanguage: getUserLanguage,
+    promptFeedback: promptFeedback,
+    averageGrade: averageGrade
 };

@@ -17,7 +17,7 @@ function main() {
     var submitButton = document.getElementById('submit-speech');
     var speechSubmission = document.getElementById('speech-input');
     var speechDisplay = document.getElementById('speech-as-text');
-    
+
     // Speech-to-text variables
     var userLanguage = document.getElementById('user-language').value;
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -33,11 +33,11 @@ function main() {
             audio: true
         }).then(function(stream) {
             var mediaRecorder = new MediaRecorder(stream);
-    
+
             /* *******************************
             ***** AUDIO PLAYBACK SECTION *****
             ******************************* */
-            mediaRecorder.onstop = function(e) {    
+            mediaRecorder.onstop = function(e) {
                 var clipContainer = document.createElement('article');
                 var audio = document.createElement('audio');
                 clipContainer.classList.add('clip');
@@ -45,7 +45,7 @@ function main() {
 
                 clipContainer.appendChild(audio);
                 soundClip.appendChild(clipContainer);
-    
+
                 var blob = new Blob(chunks, { 'type': 'audio/wav; codecs=MS_PCM' });
                 chunks = [];
                 var audioURL = window.URL.createObjectURL(blob);
@@ -61,9 +61,9 @@ function main() {
                 // xhr.setRequestHeader('enctype', 'multipart/form-data');
                 // xhr.send(form);
             };
-    
+
             var chunks = [];
-    
+
             mediaRecorder.ondataavailable = function(e) {
                 chunks.push(e.data);
             };
@@ -73,7 +73,7 @@ function main() {
             ******************************* */
             recognition.onerror = function(event) {
                 if(event.error == 'no-speech') {
-                    speechSubmission.value = 'No speech was detected. Try again.';  
+                    speechSubmission.value = 'No speech was detected. Try again.';
                 }
             };
 
@@ -114,7 +114,7 @@ function main() {
 
                 recognition.start();
             };
-    
+
             stop.onclick = function() {
                 mediaRecorder.stop();
                 record.style.background = '';

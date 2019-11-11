@@ -8,8 +8,8 @@ const { Client } = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  //ssl:false, //when locally developing! 
-  ssl: true, //when push to remote must be true! 
+  ssl:false, //when locally developing!
+  //ssl: true, //when push to remote must be true!
 });
 
 client.connect();
@@ -120,8 +120,8 @@ function getPromptById(promptId) {
 
 function updatePromptActivities(data) {
     return new Promise(function(resolve, reject) {
-        client.query('INSERT INTO prompt_activities(user_id, prompt_id, text) VALUES ($1, $2, $3)',
-          [data.userId, data.promptId, data.text], function(err, results) {
+        client.query('INSERT INTO prompt_activities(user_id, prompt_id, text, feedback_text, grade) VALUES ($1, $2, $3, $4, $5)',
+          [data.userId, data.promptId, data.text, data.feedback_text, data.grade], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
