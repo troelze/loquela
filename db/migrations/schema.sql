@@ -32,6 +32,18 @@ CREATE TABLE prompts (
     updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE results (
+    id serial PRIMARY KEY,
+    prompt_id integer NOT NULL,
+    attempted integer NOT NULL default 0,
+    correct integer NOT NULL,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT results_prompt_id_fkey FOREIGN KEY (prompt_id)
+      REFERENCES prompts (id) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE CASCADE
+);
+
 CREATE TABLE answers (
     id serial PRIMARY KEY,
     prompt_id integer NOT NULL,
