@@ -4,6 +4,8 @@ const progressBarFull = document.getElementById("progressBarFull");
 
 let prompts = [];
 
+var MAX_PROMPTS = 0;
+
 fetch('lesson/1')
   .then(
     function(response) {
@@ -18,9 +20,13 @@ fetch('lesson/1')
         //console.log(data);
         data.prompts.forEach(element => {
             prompts.push(element.text);
-            console.log(prompts);
-            startLesson();
+            //console.log(prompts);
+           
+            
         });
+        
+        MAX_PROMPTS = prompts.length;
+        startLesson();
       });
     }
   )
@@ -52,7 +58,7 @@ let availablePrompts = [];
 // ]
 
 //CONSTANTS
-const MAX_PROMPTS = 4;
+
 
 
 startLesson = () => {
