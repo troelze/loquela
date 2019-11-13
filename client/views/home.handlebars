@@ -26,7 +26,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{oneUser}}
+            {{username}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/profile">Settings</a>
@@ -39,59 +39,23 @@
 
 </nav>
 
-    {{!-- <script>
-        var recordedChunks = [];
 
-        function handleDataAvailable(event) {
-            console.log("data-available");
-            if (event.data.size > 0) {
-                recordedChunks.push(event.data);
-                console.log(recordedChunks);
-                download();
-            } else {
-            //
-            }
-        }
+ <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Welcome back {{username}}!</h1>
+      <p class="lead text-muted">You are currently practicing how to discuss {{topic}} in {{language}}</p>
+      <p>
+        <a href="/lesson" class="btn btn-primary my-2">Continue</a> 
 
-        function download() {
-            var blob = new Blob(recordedChunks, {
-                type: "audio/wav"
-            });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = url;
-            a.download = "test.wav";
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-
-        window.onload = async () => { 
-            const constraints = {
-                audio: true
-            }
-            try {
-                stream = await navigator.mediaDevices.getUserMedia(constraints);
-                /* use the stream */
-                console.log(stream.getAudioTracks())
+    
+        
+        <a href="#" class="btn btn-secondary my-2">View all lessons</a>
+      </p>
+    </div>
+  </section>
 
 
-                mediaRecorder = new MediaRecorder(stream);
 
-                mediaRecorder.ondataavailable = handleDataAvailable;
-                mediaRecorder.start(1000);
 
-                // demo: to download after 9sec
-                setTimeout(event => {
-                    console.log("stopping");
-                    mediaRecorder.stop();
-                }, 9000);
 
-            } catch(err) {
-            /* handle the error */
-                console.log(err)
-            }
-        }
-    </script> --}}
 </div>

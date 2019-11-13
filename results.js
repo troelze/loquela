@@ -4,58 +4,11 @@ module.exports = function() {
     var db = require(__dirname + '/db/queries');
     var helpers = require('./helpers');
     const session = require('express-session');
-    // Imports the Google Cloud client library
-    const language = require('@google-cloud/language');
     // let {PythonShell} = require('python-shell');
     // var multer = require('multer');
     // var upload = multer();
     // var fs = require('fs');
     // var tmp = require('tmp');
-
-//Source: https://cloud.google.com/natural-language/docs/analyzing-syntax
-async function googleSyntax(speechSubmissionText) {
-  return new Promise(async function(resolve, reject) {
-    // Creates a client
-    const client = new language.LanguageServiceClient();
-
-    const text = speechSubmissionText;
-
-    // Prepares a document, representing the provided text
-    const document = {
-      content: text,
-      type: 'PLAIN_TEXT',
-    };
-
-    // Detects syntax in the document
-    const [syntax] = await client.analyzeSyntax({document});
-
-    var syntaxAnalysis = [];
-
-    syntax.tokens.forEach(part => {
-      //Log the part of speech from analysis
-      console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
-      //console.log(`Morphology:`, part.partOfSpeech); //Additional information on part of speech
-      syntaxAnalysis.push(`${part.partOfSpeech.tag}`);
-    });
-    //return the parts of speech in sentence
-    resolve(syntaxAnalysis);
-  });
-}
-
-    function getPromptData(userId) {
-        return new Promise(function(resolve, reject) {
-            var context = {};
-
-            helpers.getUserLanguage(userId).then(function(language) {
-                context.language = helpers.capitalizeFirstLetter(language);
-
-                db.getPromptsByLanguage(language).then(function(userPrompts) {
-                    context.prompts = userPrompts;
-                    resolve(context);
-                });
-            });
-        });
-    }
 
     function getPromptData(userId) {
         return new Promise(function(resolve, reject) {
@@ -121,7 +74,7 @@ async function googleSyntax(speechSubmissionText) {
           res.render('login');
         } else {
           getPromptData(req.session.user.id).then(function(context) {
-            res.render('prompts', context);
+            res.render('results', context);
           });
         }
     });
@@ -150,9 +103,6 @@ async function googleSyntax(speechSubmissionText) {
         }
     });
 
-
-
-
     // Sources: https://discourse.processing.org/t/uploading-recorded-audio-to-web-server-node-js-express/4569/4,
     // https://www.npmjs.com/package/tmp
     // Note: Leaving the file saving and python connection pieces in here as comments
@@ -169,33 +119,15 @@ async function googleSyntax(speechSubmissionText) {
             //     res.render('individual-prompt', context);
             // });
 
-            //Analyze user submission
-            googleSyntax(req.body.speechSubmission).then(function(syntaxAnalysis) {
-              //Check if Noun and Adjective are present in speechText
-              //Hardcoded in prompts/:id route for Prompt 1
-              //TODO: Make more abstract to use for each individual prompt
-              var nounFeedback = helpers.promptFeedback(syntaxAnalysis, 'NOUN');
-              var adjFeedback = helpers.promptFeedback(syntaxAnalysis, 'ADJ');
+            // Add the user's response to the database before redirecting
+            dbData = {
+                userId: req.session.user.id,
+                promptId: req.params.id,
+                text: req.body.speechSubmission
+            };
 
-              var grades = [];
-              grades.push(nounFeedback["grade"]);
-              grades.push(adjFeedback["grade"]);
-
-              //Calculate average grade
-              var finalGrade = helpers.averageGrade(grades);
-
-              // Add the user's response to the database before redirecting
-              dbData = {
-                  userId: req.session.user.id,
-                  promptId: req.params.id,
-                  text: req.body.speechSubmission,
-                  feedback_text: nounFeedback["text"] + adjFeedback["text"],
-                  grade: finalGrade
-              };
-
-              db.updatePromptActivities(dbData);
-              res.redirect('../prompts');
-            });
+            db.updatePromptActivities(dbData);
+            res.redirect('../prompts');
         });
     });
 

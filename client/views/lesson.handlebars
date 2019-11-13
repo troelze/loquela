@@ -1,8 +1,42 @@
+
+
+
+
+
+
+
+
+
+
 <input type="hidden" id="user-language" value={{languageCode}}></input>
 <div class="container pt-5">
     <a class="btn btn-primary btn-circle btn-circle-lg m-1" href="/" ><i class="fa fa-home"></i></a> 
     <h1 class="text-center">{{name}}</h1>
     <h4 class="text-center">{{text}}</h4>
+
+    
+    <div class="container pt-4">
+        <div id="game" class="justify-center flex-column">
+            <div id ="hud">
+                <div id="hud-item">
+                    <p id="progressText" class = "hud-prefix">
+                        Prompt
+                    </p>
+                    <div id="progressBar">
+                        <div id="progressBarFull"></div>
+                    </div>
+
+                    <h1 class="hud-main-text" id="promptCounter">
+                       
+                    </h1>
+                </div>
+            </div>
+          
+            <h2 id="prompt">What</h2>
+           
+
+        </div>
+    </div>
     <br>
     <br>
     <div class="text-center">
@@ -25,12 +59,15 @@
             <button type="submit" class="btn btn-secondary hidden" id="submit-speech">Submit Response</button>
         </form>
 
+        <a class="btn btn-primary btn-circle btn-circle-lg m-1" id="next">Next</a> 
 
     </div>
 
 
+
+
+
 </div>
 
+<script src="/scripts/lesson-scripts.js"></script>
 <script src="/scripts/microphone-scripts.js"></script>
-
-
