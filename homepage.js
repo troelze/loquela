@@ -5,8 +5,7 @@ module.exports = function() {
     var helpers = require('./helpers');
     const session = require('express-session');
 
-
-    function getProfileData(userId) {
+function getProfileData(userId) {
       return new Promise(function(resolve, reject) {
           var context = {};
 
@@ -32,8 +31,6 @@ module.exports = function() {
           });
       });
   }
-
-
 
 
 
