@@ -10,22 +10,7 @@ module.exports = function() {
     // var fs = require('fs');
     // var tmp = require('tmp');
 
-    function getPromptData(userId) {
-        return new Promise(function(resolve, reject) {
-            var context = {};
-
-            helpers.getUserLanguage(userId).then(function(language) {
-                context.language = helpers.capitalizeFirstLetter(language);
-
-                db.getPromptsByLanguage(language).then(function(userPrompts) {
-                    context.prompts = userPrompts;
-                    resolve(context);
-                });
-            });
-        });
-    }
-
-    function getPromptData(userId) {
+    function getLessonData(userId) {
         return new Promise(function(resolve, reject) {
             var context = {};
 
@@ -88,37 +73,25 @@ module.exports = function() {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
         } else {
-          getPromptData(req.session.user.id).then(function(context) {
-            res.render('prompts', context);
-          });
+         
+            res.render('lesson');
+        
         }
     });
+
+
 
     router.get('/:id', function(req, res) {
         if(helpers.notLoggedIn(req)) {
-            res.render('login');
+          res.render('login');
         } else {
-            helpers.getUserLanguage(req.session.user.id).then(function(language) {
-                getIndividualPrompt(req.params.id).then(function(context) {
-                    context.promptId = req.params.id;
-                    context.nextPromptId = +req.params.id+3;
-                    console.log(context.nextPromptId);
-                    context.userId = req.session.user.id;
-                    context.languageCode = helpers.languageToCode(context.language.toLowerCase());
+          getLessonData(req.session.user.id).then(function(context) {
 
-                    // Re-route to /prompts page if this specific prompt is not for the user's language
-                    if (context.language != language) {
-                        res.redirect('../prompts');
-                    } else {
-                        context.speechAsTextClass = 'hidden';
-                        res.render('individual-prompt', context);
-                    }
-                });
-            });
+            console.log(context);
+            res.send(context);
+          });
         }
     });
-
-
 
 
     // Sources: https://discourse.processing.org/t/uploading-recorded-audio-to-web-server-node-js-express/4569/4,
