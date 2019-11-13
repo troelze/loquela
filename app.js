@@ -39,6 +39,10 @@ app.use('/profile', require('./profile.js'));
 app.use('/users', require('./users.js'));
 // Use users.js to route as users page
 app.use('/prompts', require('./prompts.js'));
+// Use users.js to route as users page
+app.use('/lesson', require('./lesson.js'));
+// Use users.js to route as users page
+app.use('/results', require('./results.js'));
 
 //Logout Route
 app.get('/logout',function(req,res,next){
