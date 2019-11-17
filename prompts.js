@@ -6,55 +6,54 @@ module.exports = function() {
     const session = require('express-session');
     // Imports the Google Cloud client library
     const language = require('@google-cloud/language');
-    // let {PythonShell} = require('python-shell');
-    // var multer = require('multer');
-    // var upload = multer();
-    // var fs = require('fs');
-    // var tmp = require('tmp');
 
-//Source: https://cloud.google.com/natural-language/docs/analyzing-syntax
-async function googleSyntax(speechSubmissionText) {
-  return new Promise(async function(resolve, reject) {
-    // Creates a client
-    const client = new language.LanguageServiceClient();
-
-    const text = speechSubmissionText;
-
-    // Prepares a document, representing the provided text
-    const document = {
-      content: text,
-      type: 'PLAIN_TEXT',
-    };
-
-    // Detects syntax in the document
-    const [syntax] = await client.analyzeSyntax({document});
-
-    var syntaxAnalysis = [];
-
-    syntax.tokens.forEach(part => {
-      //Log the part of speech from analysis
-      console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
-      //console.log(`Morphology:`, part.partOfSpeech); //Additional information on part of speech
-      syntaxAnalysis.push(`${part.partOfSpeech.tag}`);
-    });
-    //return the parts of speech in sentence
-    resolve(syntaxAnalysis);
-  });
-}
-
-    function getPromptData(userId) {
-        return new Promise(function(resolve, reject) {
-            var context = {};
-
-            helpers.getUserLanguage(userId).then(function(language) {
-                context.language = helpers.capitalizeFirstLetter(language);
-
-                db.getPromptsByLanguage(language).then(function(userPrompts) {
-                    context.prompts = userPrompts;
-                    resolve(context);
-                });
-            });
+    // Sources: https://cloud.google.com/natural-language/docs/analyzing-syntax,
+    // https://cloud.google.com/natural-language/docs/reference/rest/v1/Entity#EntityMention,
+    // https://cloud.google.com/natural-language/docs/categories
+    async function analyzeSpeech(speechSubmissionText) {
+      return new Promise(async function(resolve, reject) {
+        // Creates a client
+        const client = new language.LanguageServiceClient();
+    
+        const text = speechSubmissionText;
+    
+        // Prepares a document, representing the provided text
+        const document = {
+          content: text,
+          type: 'PLAIN_TEXT'
+        };
+    
+        // Make API calls to detect syntax, classify text, and detect entities
+        const [syntax] = await client.analyzeSyntax({document});
+        const [classification] = await client.classifyText({document});
+        const [result] = await client.analyzeEntities({document});
+        const entities = result.entities;
+    
+        let syntaxAnalysis = [];    
+        syntax.tokens.forEach(part => {
+          // Log the part of speech from analysis
+          // console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
+          // console.log(`Morphology:`, part.partOfSpeech); //Additional information on part of speech
+          syntaxAnalysis.push(part.partOfSpeech.tag);
         });
+
+        let categoryAnalysis = [];
+        classification.categories.forEach(category => {
+          // console.log(`Name: ${category.name}, Confidence: ${category.confidence}`);
+          categoryAnalysis.push(category.name.toLowerCase());
+        });
+
+        let entityAnalysis = [];
+        entities.forEach(entity => {
+          // console.log(` - Name: ${entity.name}`);
+          // console.log(` - Type: ${entity.type}, Salience: ${entity.salience}`);
+          entityAnalysis.push(entity.name.toLowerCase());
+          entityAnalysis.push(entity.type.toLowerCase());
+        });
+
+        const speechAnalysis = {syntax: syntaxAnalysis, categories: categoryAnalysis, entities: entityAnalysis};
+        resolve(speechAnalysis);
+      });
     }
 
     function getPromptData(userId) {
@@ -86,35 +85,6 @@ async function googleSyntax(speechSubmissionText) {
             });
         });
     }
-
-    // function connectToSpeechRecognition(context, promptId, speechFile) {
-    //     return new Promise(function(resolve, reject) {
-    //         // Source: https://medium.com/@HolmesLaurence/integrating-node-and-python-6b8454bfc272
-    //         var options = {args: [helpers.languageToCode(context.language.toLowerCase()), speechFile]};
-    //         PythonShell.run('../python/speech_input.py', options, function(err, data) {
-    //             if (err) {
-    //                 console.log('Error:', err);
-    //             } else {
-    //                 if (data) {
-    //                     console.log('data from python file is', data);
-    //                     context.speechAsTextClass = 'visible';
-    //                     context.speechAsText = data[0];
-
-    //                     // Add the user's response to the database before re-rendering
-    //                     dbData = {
-    //                         userId: context.userId,
-    //                         promptId: promptId,
-    //                         text: data[0]
-    //                     };
-
-    //                     db.updatePromptActivities(dbData);
-    //                 }
-    //             }
-
-    //             resolve(context);
-    //         });
-    //     });
-    // }
 
     router.get('/', function(req, res) {
         if(helpers.notLoggedIn(req)) {
@@ -150,53 +120,40 @@ async function googleSyntax(speechSubmissionText) {
         }
     });
 
-
-
-
-    // Sources: https://discourse.processing.org/t/uploading-recorded-audio-to-web-server-node-js-express/4569/4,
-    // https://www.npmjs.com/package/tmp
-    // Note: Leaving the file saving and python connection pieces in here as comments
-    // in case we want to go this route later
-    // router.post('/:id', upload.single('blob'), function(req, res) {
     router.post('/:id', function(req, res) {
-        // var tmpObj = tmp.fileSync({ postfix: '.wav' });
+      // TODO: add error handling for if submission is less than 20(?) words
+      // TODO: check if this works for other languages
+      // TODO: save more data in the db
+      db.getUserProfileByUserId(req.session.user.id).then(function(userProfileInfo) {
+        db.getPromptById(req.params.id).then(function(promptInfo) {
+          // Analyze user submission
+          analyzeSpeech(req.body.speechSubmission).then(function(speechAnalysis) {
+            // Grade the analyzed speech
+            let grades = {syntaxPoints: 0, categoryPoints: 0, entityPoints: 0, totalPoints: 0};
+            let feedback = {syntax: '', categories: '', entities: '', letterGrade: '', avgGrade: null};
 
-        // fs.writeFileSync(tmpObj.name, Buffer.from(new Uint8Array(req.file.buffer)));
+            helpers.gradeSyntax(speechAnalysis.syntax, grades, feedback);
+            helpers.gradeCategories(speechAnalysis.categories, userProfileInfo[0].topic, grades, feedback);
+            helpers.gradeEntities(speechAnalysis.entities, promptInfo.entities, grades, feedback);
 
-        var context = {};
-        helpers.getUserLanguage(req.session.user.id).then(function(language) {
-            // connectToSpeechRecognition(context, req.params.id, tmpObj.name).then(function(context) {
-            //     res.render('individual-prompt', context);
-            // });
+            // Calculate average grade
+            helpers.averageGrade(grades, feedback);
+            const feedbackString = `You got ${Math.round(feedback.avgGrade)}%, or letter grade ${feedback.letterGrade}. ${feedback.syntax} ${feedback.categories} ${feedback.entities}`;
 
-            //Analyze user submission
-            googleSyntax(req.body.speechSubmission).then(function(syntaxAnalysis) {
-              //Check if Noun and Adjective are present in speechText
-              //Hardcoded in prompts/:id route for Prompt 1
-              //TODO: Make more abstract to use for each individual prompt
-              var nounFeedback = helpers.promptFeedback(syntaxAnalysis, 'NOUN');
-              var adjFeedback = helpers.promptFeedback(syntaxAnalysis, 'ADJ');
+            // Add the user's response to the database before redirecting
+            dbData = {
+                userId: req.session.user.id,
+                promptId: req.params.id,
+                text: req.body.speechSubmission,
+                feedback_text: feedbackString,
+                grade: feedback.avgGrade
+            };
 
-              var grades = [];
-              grades.push(nounFeedback["grade"]);
-              grades.push(adjFeedback["grade"]);
-
-              //Calculate average grade
-              var finalGrade = helpers.averageGrade(grades);
-
-              // Add the user's response to the database before redirecting
-              dbData = {
-                  userId: req.session.user.id,
-                  promptId: req.params.id,
-                  text: req.body.speechSubmission,
-                  feedback_text: nounFeedback["text"] + adjFeedback["text"],
-                  grade: finalGrade
-              };
-
-              db.updatePromptActivities(dbData);
-              res.redirect('../prompts');
-            });
+            db.updatePromptActivities(dbData);
+            res.redirect('../prompts');
+          });
         });
+      });
     });
 
     return router;
