@@ -60,9 +60,9 @@ CREATE TABLE prompt_activities (
     id serial PRIMARY KEY,
     user_id integer NOT NULL,
     prompt_id integer NOT NULL,
-    text VARCHAR(255),
+    text text,
     grade VARCHAR(255),
-    feedback_text VARCHAR(255),
+    feedback_text text,
     created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT prompt_activities_user_id_fk FOREIGN KEY (user_id)

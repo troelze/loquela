@@ -86,6 +86,26 @@ module.exports = function() {
         });
     }
 
+    function getPromptsRemaining(language, topic, userId) {
+      return new Promise(function(resolve, reject) {
+          var context = {};
+
+              context.language = helpers.capitalizeFirstLetter(language);
+          
+
+              db.getRemainingPromptsByLanguageAndTopic(language, topic, userId).then(function(userPrompts) {
+                  context.prompts = userPrompts;
+               
+                  resolve(context);
+              });
+          });
+      }
+
+  
+
+
+
+
     router.get('/', function(req, res) {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
@@ -96,41 +116,99 @@ module.exports = function() {
         }
     });
 
-    router.get('/:id', function(req, res) {
+
+    router.get('/number/:id', function(req, res) {
+      if(helpers.notLoggedIn(req)) {
+          res.render('login');
+      } else {
+         
+          helpers.getUserLanguage(req.session.user.id).then(function(language) {
+              getIndividualPrompt(req.params.id).then(function(context) {
+                  context.promptId = req.params.id;
+                  context.nextPromptId = +req.params.id+3;
+                  console.log(context.nextPromptId);
+                  context.userId = req.session.user.id;
+                  context.languageCode = helpers.languageToCode(context.language.toLowerCase());
+
+                  // Re-route to /prompts page if this specific prompt is not for the user's language
+                  if (context.language != language) {
+                      res.redirect('../prompts');
+                  } else {
+                      context.speechAsTextClass = 'hidden';
+                      res.render('individual-prompt', context);
+                  }
+              });
+          });
+      }
+  });
+
+    router.get('/:topic', function(req, res) {
         if(helpers.notLoggedIn(req)) {
             res.render('login');
         } else {
+          var context = {};
             helpers.getUserLanguage(req.session.user.id).then(function(language) {
-                getIndividualPrompt(req.params.id).then(function(context) {
-                    context.promptId = req.params.id;
-                    context.nextPromptId = +req.params.id+3;
-                    console.log(context.nextPromptId);
-                    context.userId = req.session.user.id;
-                    context.languageCode = helpers.languageToCode(context.language.toLowerCase());
-
-                    // Re-route to /prompts page if this specific prompt is not for the user's language
-                    if (context.language != language) {
-                        res.redirect('../prompts');
-                    } else {
-                        context.speechAsTextClass = 'hidden';
-                        res.render('individual-prompt', context);
-                    }
-                });
-            });
+                      context.language = helpers.capitalizeFirstLetter(language);
+                      context.username = req.session.user.username;
+                      context.userId = req.session.user.id;
+                      context.languageCode = helpers.languageToCode(context.language.toLowerCase());
+                      context.speechAsTextClass = 'hidden';
+                      res.render('lessons', context);
+              });     
         }
     });
 
-    router.post('/:id', function(req, res) {
+
+    router.get('/:topic/lesson', function(req, res) {
+      if(helpers.notLoggedIn(req)) {
+          res.render('login');
+      } else {
+          helpers.getUserLanguage(req.session.user.id).then(function(language) {
+              
+            getPromptsRemaining(language, req.params.topic, req.session.user.id).then(function(context){
+
+                      //console.log(context);
+                      // context.username = req.session.user.username;
+                      // context.promptId = req.params.id;
+                      // context.nextPromptId = +req.params.id+3;
+                      // console.log(context.nextPromptId);
+                      // context.userId = req.session.user.id;
+                      // context.languageCode = helpers.languageToCode(context.language.toLowerCase());
+
+                      //console.log(context);
+                      // context.speechAsTextClass = 'hidden';
+                      res.send(context);
+                  
+              });
+          });
+      }
+  });
+
+  
+
+  
+
+
+
+
+  
+    
+
+    router.post('/:topic/:id', function(req, res) {
       // TODO: add error handling for if submission is less than 20(?) words
       // TODO: check if this works for other languages
       // TODO: save more data in the db
       db.getUserProfileByUserId(req.session.user.id).then(function(userProfileInfo) {
         db.getPromptById(req.params.id).then(function(promptInfo) {
+
+         
           // Analyze user submission
           analyzeSpeech(req.body.speechSubmission).then(function(speechAnalysis) {
             // Grade the analyzed speech
             let grades = {syntaxPoints: 0, categoryPoints: 0, entityPoints: 0, totalPoints: 0};
             let feedback = {syntax: '', categories: '', entities: '', letterGrade: '', avgGrade: null};
+
+           
 
             helpers.gradeSyntax(speechAnalysis.syntax, grades, feedback);
             helpers.gradeCategories(speechAnalysis.categories, userProfileInfo[0].topic, grades, feedback);
@@ -150,7 +228,7 @@ module.exports = function() {
             };
 
             db.updatePromptActivities(dbData);
-            res.redirect('../prompts');
+            res.redirect(`../${req.params.topic}`);
           });
         });
       });

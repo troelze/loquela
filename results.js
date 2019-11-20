@@ -40,6 +40,21 @@ module.exports = function() {
         });
     }
 
+    function getResults(language, topic, userId) {
+        return new Promise(function(resolve, reject) {
+            var context = {};
+  
+                context.language = helpers.capitalizeFirstLetter(language);
+            
+  
+                db.getResultsByTopic(language, topic, userId).then(function(userResults) {
+                    context.prompts = userResults;
+                 
+                    resolve(context);
+                });
+            });
+        }
+
     // function connectToSpeechRecognition(context, promptId, speechFile) {
     //     return new Promise(function(resolve, reject) {
     //         // Source: https://medium.com/@HolmesLaurence/integrating-node-and-python-6b8454bfc272
@@ -73,35 +88,51 @@ module.exports = function() {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
         } else {
-          getPromptData(req.session.user.id).then(function(context) {
+          (req.session.user.id).then(function(context) {
             res.render('results', context);
           });
         }
     });
 
-    router.get('/:id', function(req, res) {
+    router.get('/:topic', function(req, res) {
         if(helpers.notLoggedIn(req)) {
             res.render('login');
         } else {
             helpers.getUserLanguage(req.session.user.id).then(function(language) {
-                getIndividualPrompt(req.params.id).then(function(context) {
-                    context.promptId = req.params.id;
-                    context.nextPromptId = +req.params.id+3;
-                    console.log(context.nextPromptId);
-                    context.userId = req.session.user.id;
-                    context.languageCode = helpers.languageToCode(context.language.toLowerCase());
-
-                    // Re-route to /prompts page if this specific prompt is not for the user's language
-                    if (context.language != language) {
-                        res.redirect('../prompts');
-                    } else {
-                        context.speechAsTextClass = 'hidden';
-                        res.render('individual-prompt', context);
-                    }
+                
+              getResults(language, req.params.topic, req.session.user.id).then(function(context){
+  
+                    
+                    res.render('results', context);
+                    
                 });
             });
         }
     });
+
+    // router.get('/:id', function(req, res) {
+    //     if(helpers.notLoggedIn(req)) {
+    //         res.render('login');
+    //     } else {
+    //         helpers.getUserLanguage(req.session.user.id).then(function(language) {
+    //             getIndividualPrompt(req.params.id).then(function(context) {
+    //                 context.promptId = req.params.id;
+    //                 context.nextPromptId = +req.params.id+3;
+    //                 console.log(context.nextPromptId);
+    //                 context.userId = req.session.user.id;
+    //                 context.languageCode = helpers.languageToCode(context.language.toLowerCase());
+
+    //                 // Re-route to /prompts page if this specific prompt is not for the user's language
+    //                 if (context.language != language) {
+    //                     res.redirect('../prompts');
+    //                 } else {
+    //                     context.speechAsTextClass = 'hidden';
+    //                     res.render('individual-prompt', context);
+    //                 }
+    //             });
+    //         });
+    //     }
+    // });
 
     // Sources: https://discourse.processing.org/t/uploading-recorded-audio-to-web-server-node-js-express/4569/4,
     // https://www.npmjs.com/package/tmp

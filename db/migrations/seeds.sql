@@ -4,15 +4,15 @@ VALUES ('lauren', 'lauren@test.com', 'lauren'),
         ('hudson', 'hudson@test.com', 'hudson');
 
 
-INSERT INTO prompts (name, text, language) 
+INSERT INTO prompts (name, text, language, entities) 
 VALUES ('Prompt 1', 'Describe the weather today.', 'english', 'weather'),
-  ('Prompt 2', 'I am prompt 2.', 'french', 'TBD, TBD'),
-  ('Prompt 3', 'I am prompt 3.', 'spanish', 'TBD, TBD'),
-  ('Prompt 4', 'I am prompt 4.', 'japanese', 'TBD, TBD'),
-  ('Prompt 5', 'I am prompt 5.', 'french', 'TBD, TBD'),
-  ('Prompt 6', 'I am prompt 6.', 'russian', 'TBD, TBD'),
-  ('Prompt 7', 'I am prompt 7.', 'japanese', 'TBD, TBD'),
-  ('Prompt 8', 'I am prompt 8.', 'french', 'TBD, TBD');
+  ('Prompt 2', 'Describe your favorite movie', 'english', 'movies'),
+  ('Prompt 3', 'Describe your favorite book', 'english', 'books'),
+  ('Prompt 4', 'Describe your favorite area', 'english', 'areas'),
+  ('Prompt 5', 'Describe your favorite name', 'english', 'names'),
+  ('Prompt 6', 'Describe your favorite car', 'english', 'cars'),
+  ('Prompt 7', 'Describe your favorite place', 'english', 'place'),
+  ('Prompt 8', 'Describe your favorite person', 'english', 'person');
 
 
 INSERT INTO answers (prompt_id, correct_text) 

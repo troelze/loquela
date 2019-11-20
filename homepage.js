@@ -18,6 +18,7 @@ function getProfileData(userId) {
                   context.language = helpers.capitalizeFirstLetter(userProfileInfo[0].language);
                   context.difficulty = helpers.capitalizeFirstLetter(userProfileInfo[0].difficulty);
                   context.topic = helpers.capitalizeFirstLetter(userProfileInfo[0].topic);
+                  context.continue = userProfileInfo[0].topic;
                   context.imageUrl = helpers.getAvatarUrl(userId);
 
                   db.getPromptsByLanguage(userProfileInfo[0].language).then(function(userPrompts) {

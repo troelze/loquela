@@ -65,12 +65,13 @@ exports.up = function(db, callback) {
       type: 'timestamp',
       notNull: true,
       defaultValue: new String('CURRENT_TIMESTAMP')
-    }
+    },
+    ifNotExists: true
   }, callback);
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('answers', callback);
+  db.dropTable('results', callback);
 };
 
 exports._meta = {
