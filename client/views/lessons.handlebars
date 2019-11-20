@@ -1,0 +1,107 @@
+<div class="container ">
+  
+    <h1 class="text-center pt-5">Loquela</h1>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+            
+            </ul>
+        </div>
+
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{username}}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/profile">Settings</a>
+                        <a class="dropdown-item" href="/login">Log Out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+
+<div class="container" >
+    <br>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 style="text-align: center">Topics</h3> 
+                <div class="vertical-menu">
+                    <a href="art" id="art">Art</a>
+                    <a href="weather" id="weather">Weather</a>
+                    <a href="greetings" id="greetings">Greetings</a>
+                    <a href="sports" id="sports">Sports</a>
+                    <a href="music" id="music">Music</a>
+                </div> 
+        </div>
+    <div class="col-sm-8">
+        <div class="container pt-5">
+            <div class="container pt-4">
+                <div id="game" class="justify-center flex-column">
+                    <div id ="hud">
+                        <div id="hud-item">
+                            <p id="progressText" class = "hud-prefix">
+                                
+                            </p>
+                            <div id="progressBar">
+                                <div id="progressBarFull"></div>
+                            </div>
+                            
+                            <h1 class="hud-main-text" id="promptCounter"></h1>
+
+                        </div>
+                    </div>
+
+                        <h2 id="prompt">Prompt</h2>
+                        <br>
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="microphone-start"><i class="icon-microphone icon-3x" ></i></button>
+                        <button class="btn btn-danger" id="microphone-stop"><i class="icon-circle icon-3x"></i></button>
+                        <br>
+                        <br>
+                        <p>You said:</p>
+                        <div class="form-group">
+                            <textarea id="speech-as-text" class="text-center form-control" readonly>
+                            </textarea>
+                        </div>
+                        <br>
+                        <section id="sound-clip"></section>
+                        <br>
+                        <form method="POST" action="/prompts/{{promptId}}" onsubmit="get_action(this);">
+                            <input type="hidden" id="speech-input" name="speechSubmission"></input>
+                            <button type="submit" class="btn btn-secondary hidden" id="submit-speech">Submit Response</button>
+                        </form>
+                        
+                         <a class="btn btn-primary btn-circle btn-circle-lg m-1" id="next">Next</a> 
+                    </div>
+                    
+                   
+                </div>
+                    
+            </div>
+        </div> 
+    </div>
+</div>
+
+<script>
+   
+</script>
+
+
+<input type="hidden" id="user-language" value={{languageCode}}></input>
+<h5>Language: {{language}}</h5>  
+
+<script src="/scripts/microphone-scripts.js"></script>
+<script src="/scripts/lesson-scripts.js"></script>
+
+
+
+   
+    

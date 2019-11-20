@@ -1,12 +1,15 @@
-const prompt = document.getElementById("prompt");
+
 const progressText = document.getElementById("progressText");
 const progressBarFull = document.getElementById("progressBarFull");
+const prompt = document.getElementById("prompt");
 
-let prompts = [];
+window.onload=function(){
+  document.getElementById("next").addEventListener("click", getNewPrompt);
+  
+  
 
-var MAX_PROMPTS = 0;
-
-fetch('lesson/1')
+  var path = updateActive();
+  fetch(`${path}/lesson`)
   .then(
     function(response) {
       if (response.status !== 200) {
@@ -20,12 +23,14 @@ fetch('lesson/1')
         //console.log(data);
         data.prompts.forEach(element => {
             prompts.push(element.text);
-            //console.log(prompts);
+            prompt_ids.push(element.id);
            
-            
+           
+       
+
         });
         
-        MAX_PROMPTS = prompts.length;
+       
         startLesson();
       });
     }
@@ -33,38 +38,55 @@ fetch('lesson/1')
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
+}
 
 
 let currentPrompt = {};
+let currentPromptID = {};
 let acceptingAnswers = true;
-
 let score = 0;
 let promptCounter = 0;
 let availablePrompts = [];
+let availablePromptIDs = [];
 
-// // let prompts = [
-//     {
-//         prompt: "Como se llama?"   
-//     },
-//     {
-//         prompt: "De donde eres?"
-//     },
-//     {
-//         prompt: "Cuantos anos tienes?"
-//     },
-//     {
-//         prompt: "Bienvenido"
-//     }
-// ]
+let prompts = [];
+let prompt_ids = [];
 
-//CONSTANTS
+var MAX_PROMPTS = 10;
+
+function updateActive() {
+
+  var pathArray = (window.location.pathname.split('/'));
+ 
+
+  var category = document.getElementById(pathArray[2]);
+  category.className="active";
+
+  return pathArray[2];
+
+} 
+
+
+
+
+function get_action(form) {
+
+  var pathArray = (window.location.pathname.split('/'));
+  
+  form.action = `/prompts/${pathArray[2]}/${currentPromptID}`
+  
+}
+
 
 
 
 startLesson = () => {
-    promptCounter = 0;
+    
     availablePrompts = [ ...prompts];
-    //console.log(availablePrompts);
+    availablePromptIDs = [ ...prompt_ids]
+    promptCounter = 10-availablePrompts.length;
+
+    
     getNewPrompt();
 };
 
@@ -72,8 +94,13 @@ getNewPrompt = () => {
 
     if(availablePrompts.length === 0 || promptCounter >= MAX_PROMPTS) {
         //go to end page
-        return window.location.assign("/results")
+        var pathArray = (window.location.pathname.split('/'));
+  
+        return window.location.assign(`/results/${pathArray[2]}`)
     }
+
+   
+
 
     promptCounter++;
 
@@ -86,12 +113,16 @@ getNewPrompt = () => {
     const promptIndex = Math.floor(Math.random() * availablePrompts.length);
         currentPrompt = availablePrompts[promptIndex];
         prompt.innerText = currentPrompt;
+        currentPromptID = availablePromptIDs[promptIndex];
+       
 
     availablePrompts.splice(promptIndex, 1); //get rid of used prompt
 }
 
 
-document.getElementById("next").addEventListener("click", getNewPrompt);
+
+
+
 
 
 

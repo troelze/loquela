@@ -130,6 +130,34 @@ function updatePromptActivities(data) {
     });
 }
 
+
+
+function getRemainingPromptsByLanguageAndTopic(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id != $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+           
+            
+            resolve(results.rows);
+        });
+    });
+}
+
+function getResultsByTopic(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id, prompt_activities.grade, prompt_activities.feedback_text FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id = $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+           
+            
+            resolve(results.rows);
+        });
+    });
+}
+
 // Export all query functions for user here
 module.exports = {
     getUsers: getUsers,
@@ -141,5 +169,8 @@ module.exports = {
     addUserProfile: addUserProfile,
     getPromptsByLanguage: getPromptsByLanguage,
     updatePromptActivities: updatePromptActivities,
-    getPromptById: getPromptById
+    getPromptById: getPromptById,
+    getResultsByTopic: getResultsByTopic,
+    getRemainingPromptsByLanguageAndTopic: getRemainingPromptsByLanguageAndTopic
+
 };
