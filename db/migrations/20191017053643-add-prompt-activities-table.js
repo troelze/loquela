@@ -72,7 +72,8 @@ exports.up = function(db, callback) {
       type: 'timestamp',
       notNull: true,
       defaultValue: new String('CURRENT_TIMESTAMP')
-    }
+    },
+    ifNotExists: true
   }, callback);
 };
 

@@ -9,10 +9,10 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/prompts">Prompts</a>
+            <a class="nav-link" href="/prompts">All Prompts</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Results</a>
+            <a class="nav-link" href="/results">Results</a>
         </li> 
         <li class="nav-item">
             <a class="nav-link" href="/users">Users</a>
@@ -43,13 +43,13 @@
  <section class="jumbotron text-center">
     <div class="container">
       <h1 class="jumbotron-heading">Welcome back {{username}}!</h1>
-      <p class="lead text-muted">You are currently practicing how to discuss {{topic}} in {{language}}</p>
+      <p class="lead text-muted">You are currently practicing {{language}}</p>
       <p>
-        <a href="/lesson" class="btn btn-primary my-2">Continue</a> 
+        <a href="/prompts/{{continue}}" class="btn btn-primary my-2">Continue</a> 
 
     
         
-        <a href="#" class="btn btn-secondary my-2">View all lessons</a>
+     
       </p>
     </div>
   </section>
