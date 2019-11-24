@@ -1,14 +1,14 @@
 <div class="container ">
-  
+
     <h1 class="text-center pt-5">Loquela</h1>
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
-            
+
             </ul>
         </div>
 
@@ -32,7 +32,7 @@
     <br>
     <div class="row">
         <div class="col-sm-4">
-            <h3 style="text-align: center">Topics</h3> 
+            <h3 style="text-align: center">Topics</h3>
                 <div class="vertical-menu">
                     <a href="art" id="art">Art</a>
                     <a href="weather" id="weather">Weather</a>
@@ -42,7 +42,7 @@
                     <a href="food_and_drink" id="food_and_drink">Food and Drink</a>
                     <a href="hobbies_and_leisure" id="hobbies_and_leisure">Hobbies and Leisure</a>
                     <a href="travel" id="travel">Travel</a>
-                </div> 
+                </div>
         </div>
     <div class="col-sm-8">
         <div class="container pt-5">
@@ -51,12 +51,12 @@
                     <div id ="hud">
                         <div id="hud-item">
                             <p id="progressText" class = "hud-prefix">
-                                
+
                             </p>
                             <div id="progressBar">
                                 <div id="progressBarFull"></div>
                             </div>
-                            
+
                             <h1 class="hud-main-text" id="promptCounter"></h1>
 
                         </div>
@@ -65,6 +65,10 @@
                         <h2 id="prompt">Prompt</h2>
                         <br>
                     <div class="text-center">
+                        <div class="alert alert-danger hidden" id="word-length-error" role="alert">
+                            Your answer must have at least 20 words. Please try again.
+                        </div>
+                        <br>
                         <button class="btn btn-primary" id="microphone-start"><i class="icon-microphone icon-3x" ></i></button>
                         <button class="btn btn-danger" id="microphone-stop"><i class="icon-circle icon-3x"></i></button>
                         <br>
@@ -77,34 +81,29 @@
                         <br>
                         <section id="sound-clip"></section>
                         <br>
-                        <form method="POST" action="/prompts/{{promptId}}" onsubmit="get_action(this);">
+                        <form method="POST" action="/prompts/topic/{{promptId}}" onsubmit="get_action(this);">
                             <input type="hidden" id="speech-input" name="speechSubmission"></input>
                             <button type="submit" class="btn btn-secondary hidden" id="submit-speech">Submit Response</button>
                         </form>
-                        
-                         <a class="btn btn-primary btn-circle btn-circle-lg m-1" id="next">Next</a> 
+
+                         <a class="btn btn-primary btn-circle btn-circle-lg m-1" id="next">Next</a>
                     </div>
-                    
-                   
+
+
                 </div>
-                    
+
             </div>
-        </div> 
+        </div>
     </div>
 </div>
 
 <script>
-   
+
 </script>
 
 
 <input type="hidden" id="user-language" value={{languageCode}}></input>
-<h5>Language: {{language}}</h5>  
+<h5>Language: {{language}}</h5>
 
 <script src="/scripts/microphone-scripts.js"></script>
 <script src="/scripts/lesson-scripts.js"></script>
-
-
-
-   
-    

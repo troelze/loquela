@@ -1,26 +1,26 @@
 <div class="container ">
     <h1 class="text-center pt-5">Results</h1>
-    <a class="btn btn-primary btn-circle btn-circle-lg m-1" href="/" ><i class="fa fa-home"></i></a> 
-    
+    <a class="btn btn-primary btn-circle btn-circle-lg m-1" href="/" ><i class="fa fa-home"></i></a>
+
     <table class="table">
-        <thead> 
-            <th>Name</th> 
-            <th>Text</th> 
-            <th>Grade</th> 
-            <th>Feedback</th> 
-        </thead> 
-        <tbody> 
-            {{#each prompts}} 
+        <thead>
+            <th>Name</th>
+            <th>Text</th>
+            <th>Grade</th>
+            <th>Feedback</th>
+        </thead>
+        <tbody>
+            {{#each prompts}}
             <tr> 
-                <td style="width: 20%;"><a href="/prompts/{{id}}">{{name}}</a></td> 
-                <td style="width: 20%;"><a>{{text}}</a></td> 
-                <td style="width: 20%;"><a>{{grade}}</a></td> 
-                <td style="width: 40%;"><a>{{feedback_text}}</a></td> 
-            </tr> 
-            {{/each}} 
-        </tbody> 
-    </table> 
-    <h5>Current Language: {{language}}</h5>  
-    
-     
+                <td style="width: 20%;"><a href="/prompts/{{id}}">{{name}}</a></td>
+                <td style="width: 20%;"><a>{{text}}</a></td>
+                <td style="width: 20%;"><a>{{grade}}</a></td>
+                <td style="width: 40%;"><a>{{feedback_text}}</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <h5>Current Language: {{language}}</h5>
+
+
 </div>

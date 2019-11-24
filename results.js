@@ -10,16 +10,18 @@ module.exports = function() {
     // var fs = require('fs');
     // var tmp = require('tmp');
 
+    //Function gets data Results main page that only displays prompts/feedback that
+    //the user has recieved feedback/grade for
     function getPromptData(userId) {
         return new Promise(function(resolve, reject) {
             var context = {};
-
+            //Get users language from profile
             helpers.getUserLanguage(userId).then(function(language) {
                 context.language = helpers.capitalizeFirstLetter(language);
-
-                db.getPromptsByLanguage(language).then(function(userPrompts) {
-                    context.prompts = userPrompts;
-                    resolve(context);
+                //Call to get prompts that the user has completed and recievced feedback/grade for
+                db.getUserCompletedResults(language, userId).then(function(userResults){
+                  context.prompts = userResults
+                  resolve(context)
                 });
             });
         });
@@ -43,13 +45,13 @@ module.exports = function() {
     function getResults(language, topic, userId) {
         return new Promise(function(resolve, reject) {
             var context = {};
-  
+
                 context.language = helpers.capitalizeFirstLetter(language);
-            
-  
+
+
                 db.getResultsByTopic(language, topic, userId).then(function(userResults) {
                     context.prompts = userResults;
-                 
+
                     resolve(context);
                 });
             });
@@ -88,7 +90,7 @@ module.exports = function() {
         if(helpers.notLoggedIn(req)) {
           res.render('login');
         } else {
-          (req.session.user.id).then(function(context) {
+          getPromptData(req.session.user.id).then(function(context) {
             res.render('results', context);
           });
         }
@@ -99,12 +101,12 @@ module.exports = function() {
             res.render('login');
         } else {
             helpers.getUserLanguage(req.session.user.id).then(function(language) {
-                
+
               getResults(language, req.params.topic, req.session.user.id).then(function(context){
-  
-                    
+
+
                     res.render('results', context);
-                    
+
                 });
             });
         }
