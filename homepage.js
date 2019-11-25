@@ -65,6 +65,8 @@ function checkTopicProgress(language, topic, userId) {
                 context.topicCount = topicCheck.topicCount;
                 context.topicTotal = topicCheck.topicTotal;
               }
+              //Replace underscores with spaces for context.topic to make it look nicer for homepage
+              context.topic = context.topic.replace(/_/g, ' ');
               res.render('home', context);
             });
           });
