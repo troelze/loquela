@@ -130,16 +130,14 @@ function updatePromptActivities(data) {
     });
 }
 
-
-
 function getRemainingPromptsByLanguageAndTopic(language, topic, userId) {
     return new Promise(function(resolve, reject) {
         client.query('SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id != $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
-           
-            
+
+
             resolve(results.rows);
         });
     });
@@ -147,12 +145,26 @@ function getRemainingPromptsByLanguageAndTopic(language, topic, userId) {
 
 function getResultsByTopic(language, topic, userId) {
     return new Promise(function(resolve, reject) {
-        client.query('SELECT prompts.name, prompts.text, prompts.id, prompt_activities.grade, prompt_activities.feedback_text FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id = $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id, prompt_activities.text AS user_transcript, prompt_activities.grade, prompt_activities.feedback_text FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id = $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
-           
-            
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
+//Retrieves only prompts that user has completed and recieved feedback/grade for
+function getUserCompletedResults(language, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id, prompt_activities.text AS user_transcript, prompt_activities.grade, prompt_activities.feedback_text FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND user_id = $2 ORDER BY prompts.id ASC', [language, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+
             resolve(results.rows);
         });
     });
@@ -171,6 +183,6 @@ module.exports = {
     updatePromptActivities: updatePromptActivities,
     getPromptById: getPromptById,
     getResultsByTopic: getResultsByTopic,
-    getRemainingPromptsByLanguageAndTopic: getRemainingPromptsByLanguageAndTopic
-
+    getRemainingPromptsByLanguageAndTopic: getRemainingPromptsByLanguageAndTopic,
+    getUserCompletedResults: getUserCompletedResults
 };

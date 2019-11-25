@@ -27,7 +27,7 @@ function main() {
     recognition.continuous = true;
     recognition.lang = userLanguage;
     var finalSpeech = '';
-    
+
     // Request microphone access and enable it if granted
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia ({
