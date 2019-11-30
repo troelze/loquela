@@ -73,6 +73,7 @@
 
 }
 
+
 #prompt {
   text-align: center;
 
@@ -86,12 +87,13 @@
 .vertical-menu a {
   background-color: #eee; /* Grey background color */
   color: black; /* Black text color */
-  display: block; /* Make the links appear below each other */
+  display: block; /*Make the links appear below each other*/
   padding:12px; /* Add some padding */
   text-decoration: none; /* Remove underline from links */
   height: 55px;
  
 }
+
 
 .vertical-menu a:hover {
   background-color: #ccc; /* Dark grey background on mouse-over */

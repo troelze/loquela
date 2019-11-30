@@ -51,6 +51,7 @@ module.exports = function() {
 
                 db.getResultsByTopic(language, topic, userId).then(function(userResults) {
                     context.prompts = userResults;
+                    
 
                     resolve(context);
                 });
@@ -91,7 +92,7 @@ module.exports = function() {
           res.render('login');
         } else {
           getPromptData(req.session.user.id).then(function(context) {
-            res.render('results', context);
+            res.render('results-all', context);
           });
         }
     });
@@ -104,8 +105,8 @@ module.exports = function() {
 
               getResults(language, req.params.topic, req.session.user.id).then(function(context){
 
-
-                    res.render('results', context);
+                    context.topic = helpers.capitalizeFirstLetter(req.params.topic);
+                    res.render('results-topic', context);
 
                 });
             });

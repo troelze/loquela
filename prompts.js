@@ -88,8 +88,17 @@ module.exports = function() {
 
               db.getRemainingPromptsByLanguageAndTopic(language, topic, userId).then(function(userPrompts) {
                   context.prompts = userPrompts;
+
+                  db.getNumOtherPrompts(language, topic, userId).then(function(otherPrompts){
+
+                      context.other = otherPrompts; //return array of integer values for each topic num remaining prompts
+                      
+                      //console.log(otherPrompts);
+                      resolve(context);
+
+                  });
                
-                  resolve(context);
+                
               });
           });
       }
@@ -148,10 +157,15 @@ module.exports = function() {
                       context.userId = req.session.user.id;
                       context.languageCode = helpers.languageToCode(context.language.toLowerCase());
                       context.speechAsTextClass = 'hidden';
-                      res.render('lessons', context);
+                     
+                      db.updateCurrentTopic(req.session.user.id, req.params.topic).then(function(){
+                        res.render('lessons', context);
+                      });
               });     
         }
     });
+
+
 
     //Send data for the lessons page to parse on the fly
     //not meant to render any page

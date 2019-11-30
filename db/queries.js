@@ -60,6 +60,21 @@ function updateUserProfile(data) {
     });
 }
 
+function updateCurrentTopic(userId, topic) {
+    return new Promise(function(resolve, reject) {
+        client.query('UPDATE user_profiles SET topic = $1 WHERE user_id = $2',
+          [topic.toLowerCase(), userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            console.log("updating currnet top");
+            resolve(results.rows);
+        });
+    });
+}
+
+
+
 function updateUser(data) {
     return new Promise(function(resolve, reject) {
         client.query('UPDATE users SET username = $1 WHERE id = $2', [data.username, data.userId], function(err, results) {
@@ -170,12 +185,28 @@ function getUserCompletedResults(language, userId) {
     });
 }
 
+function getNumOtherPrompts(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('select rows as count from (select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $4 AND user_id is null OR language = $1 AND topic = $4 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $5 AND user_id is null OR language = $1 AND topic = $5 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $6 AND user_id is null OR language = $1 AND topic = $6 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $7 AND user_id is null OR language = $1 AND topic = $7 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $8 AND user_id is null OR language = $1 AND topic = $8 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $9 AND user_id is null OR language = $1 AND topic = $9 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $10 AND user_id is null OR language = $1 AND topic = $10 AND user_id != $3 ORDER BY prompts.id asc) as foo) as u', [language, 'art', userId, 'weather', 'sports', 'movies', 'electronics', 'food_and_drink', 'hobbies_and_leisure', 'travel'], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+            //console.log(results.rows);
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
 // Export all query functions for user here
 module.exports = {
     getUsers: getUsers,
     getUserById: getUserById,
     getUserProfileByUserId: getUserProfileByUserId,
     updateUserProfile: updateUserProfile,
+    updateCurrentTopic: updateCurrentTopic,
     updateUser: updateUser,
     addUser: addUser,
     addUserProfile: addUserProfile,
@@ -183,6 +214,7 @@ module.exports = {
     updatePromptActivities: updatePromptActivities,
     getPromptById: getPromptById,
     getResultsByTopic: getResultsByTopic,
+    getNumOtherPrompts: getNumOtherPrompts,
     getRemainingPromptsByLanguageAndTopic: getRemainingPromptsByLanguageAndTopic,
     getUserCompletedResults: getUserCompletedResults
 };
