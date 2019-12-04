@@ -191,7 +191,7 @@ function gradeEntities(submission, expectedEntities, grades, feedback) {
   grades.totalPoints += maxPoints;
 
   if (points < maxPoints) {
-    feedback.entities = `You missed points because you didn't hit all the necessary concepts for your topic. Next time, try to give a more detailed answer and include these word or words: ${expectedEntities}.`;
+    feedback.entities = `You missed points because you didn't hit all the necessary concepts for your topic. Next time, try to give a more detailed answer and talk more about these topic(s): ${expectedEntities}.`;
   } else {
     feedback.entities = 'You got full points by hitting all the key points for your topic. Great work!';
   }
