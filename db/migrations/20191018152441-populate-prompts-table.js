@@ -268,7 +268,7 @@ exports.up = async function(db, callback) {
   // We need to use pg-format and create a new connection here because otherwise there's
   // no support for inserting multiple values at once
   var client = new pg.Client({
-      connectionString: 'postgres://me:password@localhost:5432/loquela'
+      connectionString: 'postgres://tfneoediexwyly:cbf8a957cb82b8d2ee7401b5d04b9ba267757f4a86bd56f73b748540480c0b3d@ec2-174-129-227-128.compute-1.amazonaws.com:5432/d4e8l6fk936nk'
   });
   client.connect().then(function() {
     client.query(query).then(function() {
