@@ -30,6 +30,8 @@ exports.up = function(db, callback) {
     name: 'string',
     text: 'string',
     language: 'string',
+    topic: 'string',
+    entities: 'string',
     created_at: 
     {
       type: 'timestamp',

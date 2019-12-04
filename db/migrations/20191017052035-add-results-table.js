@@ -70,7 +70,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('answers', callback);
+  db.dropTable('results', callback);
 };
 
 exports._meta = {

@@ -16,7 +16,7 @@ client.connect();
 
 
 function getUsers() {
-    return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
         client.query('SELECT * FROM users', function(err, results) {
             if (err) {
                 console.log('Error:', err);
@@ -59,6 +59,20 @@ function updateUserProfile(data) {
         });
     });
 }
+
+function updateCurrentTopic(userId, topic) {
+    return new Promise(function(resolve, reject) {
+        client.query('UPDATE user_profiles SET topic = $1 WHERE user_id = $2',
+          [topic.toLowerCase(), userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+            resolve(results.rows);
+        });
+    });
+}
+
+
 
 function updateUser(data) {
     return new Promise(function(resolve, reject) {
@@ -120,11 +134,92 @@ function getPromptById(promptId) {
 
 function updatePromptActivities(data) {
     return new Promise(function(resolve, reject) {
-        client.query('INSERT INTO prompt_activities(user_id, prompt_id, text) VALUES ($1, $2, $3)',
-          [data.userId, data.promptId, data.text], function(err, results) {
+        client.query('INSERT INTO prompt_activities(user_id, prompt_id, text, feedback_text, grade, letter_grade) VALUES ($1, $2, $3, $4, $5, $6)',
+          [data.userId, data.promptId, data.text, data.feedbackText, data.grade, data.letterGrade], function(err, results) {
             if (err) {
                 console.log('Error:', err);
             }
+            resolve(results.rows);
+        });
+    });
+}
+
+function getRemainingPromptsByLanguageAndTopic(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id != $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
+function getResultsByTopic(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id, prompt_activities.text AS user_transcript, prompt_activities.grade, prompt_activities.feedback_text FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id = $3 ORDER BY prompts.id ASC', [language, topic, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
+function getCompletedByTopic(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT distinct prompt_activities.prompt_id FROM prompts JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND (user_id is null OR user_id = $3)', [language, topic, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
+function getPromptsByTopic(language, topic) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT * FROM prompts WHERE language = $1 AND topic = $2', [language, topic], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
+//Retrieves only prompts that user has completed and recieved feedback/grade for
+function getUserCompletedResults(language, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('SELECT prompts.name, prompts.text, prompts.id, prompt_activities.text AS user_transcript, prompt_activities.grade, prompt_activities.feedback_text FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND user_id = $2 ORDER BY prompts.id ASC', [language, userId], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+
+            resolve(results.rows);
+        });
+    });
+}
+
+function getNumOtherPrompts(language, topic, userId) {
+    return new Promise(function(resolve, reject) {
+        client.query('select rows as count from (select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $2 AND user_id is null OR language = $1 AND topic = $2 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $4 AND user_id is null OR language = $1 AND topic = $4 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $5 AND user_id is null OR language = $1 AND topic = $5 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $6 AND user_id is null OR language = $1 AND topic = $6 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $7 AND user_id is null OR language = $1 AND topic = $7 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $8 AND user_id is null OR language = $1 AND topic = $8 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $9 AND user_id is null OR language = $1 AND topic = $9 AND user_id != $3 ORDER BY prompts.id asc) as foo union all select count(*) as rows from (SELECT prompts.name, prompts.text, prompts.id FROM prompts LEFT OUTER JOIN prompt_activities ON prompt_activities.prompt_id = prompts.id WHERE language = $1 AND topic = $10 AND user_id is null OR language = $1 AND topic = $10 AND user_id != $3 ORDER BY prompts.id asc) as foo) as u', [language, 'art', userId, 'weather', 'sports', 'movies', 'electronics', 'food_and_drink', 'hobbies_and_leisure', 'travel'], function(err, results) {
+            if (err) {
+                console.log('Error:', err);
+            }
+
+            //console.log(results.rows);
+
+
             resolve(results.rows);
         });
     });
@@ -136,10 +231,17 @@ module.exports = {
     getUserById: getUserById,
     getUserProfileByUserId: getUserProfileByUserId,
     updateUserProfile: updateUserProfile,
+    updateCurrentTopic: updateCurrentTopic,
     updateUser: updateUser,
     addUser: addUser,
     addUserProfile: addUserProfile,
     getPromptsByLanguage: getPromptsByLanguage,
     updatePromptActivities: updatePromptActivities,
-    getPromptById: getPromptById
+    getPromptById: getPromptById,
+    getResultsByTopic: getResultsByTopic,
+    getCompletedByTopic: getCompletedByTopic,
+    getPromptsByTopic: getPromptsByTopic,
+    getNumOtherPrompts: getNumOtherPrompts,
+    getRemainingPromptsByLanguageAndTopic: getRemainingPromptsByLanguageAndTopic,
+    getUserCompletedResults: getUserCompletedResults
 };

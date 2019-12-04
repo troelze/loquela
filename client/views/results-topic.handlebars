@@ -1,0 +1,30 @@
+{{> navbar}}
+<div class="container ">
+    <h1 class="text-center pt-5">Results</h1>
+    <h2 class="text-center pt-5">{{topic}}</h2>
+    <h3 class="text-center pt5">{{language}}</h3>
+
+    <table class="table">
+        <thead>
+            <th>Name</th>
+            <th>Text</th>
+            <th>Your Response</th>
+            <th>Grade</th>
+            <th>Feedback</th>
+        </thead>
+        <tbody>
+            {{#each prompts}}
+            <tr>
+                <td style="width: 10%;"><a href="/prompts/{{../topic}}">{{name}}</a></td>
+                <td style="width: 15%;"><a>{{text}}</a></td>
+                <td style="width: 40%;"><a>{{user_transcript}}</a></td>
+                <td style="width: 5%;"><a>{{grade}}%</a></td>
+                <td style="width: 30%;"><a>{{feedback_text}}</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{!-- <h5>Current Language: {{language}}</h5> --}}
+
+
+</div>

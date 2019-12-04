@@ -1,0 +1,137 @@
+{{> navbar}}
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 style="text-align: center">Topics</h3>
+                <div class="vertical-menu">
+                    <a href="art" id="art">
+                        <div style="float:left; width: 50%;">Art</div>
+                        
+                        <div class="progress">
+                            <div id="artPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="weather" id="weather">
+                        <div style="float:left; width: 50%;">Weather</div>
+                        
+                        <div class="progress">
+                            <div id="weatherPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="sports" id="sports">
+                        <div style="float:left; width: 50%;">Sports</div>
+                        
+                        <div class="progress">
+                            <div id="sportsPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="movies" id="movies">
+                        <div style="float:left; width: 50%;">Movies</div>
+                        
+                        <div class="progress">
+                            <div id="moviesPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="electronics" id="electronics">
+                        <div style="float:left; width: 50%;">Electronics</div>
+                        
+                        <div class="progress">
+                            <div id="electronicsPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="food_and_drink" id="food_and_drink">
+                        <div style="float:left; width: 50%;">Food and Drinks</div>
+                        
+                        <div class="progress">
+                            <div id="foodPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="hobbies_and_leisure" id="hobbies_and_leisure">
+                        <div style="float:left; width: 50%;">Hobbies and Leisure</div>
+                        
+                        <div class="progress">
+                            <div id="hobbiesPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="travel" id="travel">
+                        <div style="float:left; width: 50%;">Travel</div>
+                        
+                        <div class="progress">
+                            <div id="travelPB" class="progress-bar progress-bar-striped" role="progressbar" style="width: 20%; color:black;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+        </div>
+    <div class="col-sm-8">
+        <div class="container pt-5">
+                <div id="game-completed" class="justify-center flex-column hidden text-center">
+                    <h2>Great work! All prompts have been completed for this topic.</h2>
+                    <br>
+                    <h5 class="font-italic">View Results </h5>
+                    <button class="btn btn-secondary" id="view-results">Results</button>
+                    <br>
+                    <h5 class="font-italic">Move on to next topic <h5>
+                    <button class="btn btn-secondary" id="next-topic">Continue</button>
+                </div>
+                <div id="game" class="justify-center flex-column visible">
+                    <div id ="hud">
+                        <div id="hud-item">
+                            <p id="progressText" class = "hud-prefix">
+
+                            </p>
+                           
+
+                            <h1 class="hud-main-text" id="promptCounter"></h1>
+
+                        </div>
+                    </div>
+
+                        <h2 id="prompt">Prompt</h2>
+                        <br>
+                    <div class="text-center">
+                        <div class="alert alert-danger hidden" id="word-length-error" role="alert">
+                            Your answer must have at least 20 words. Please try again.
+                        </div>
+                        <br>
+                        <button class="btn btn-primary" id="microphone-start"><i class="icon-microphone icon-3x" ></i></button>
+                        <button class="btn btn-danger" id="microphone-stop"><i class="icon-circle icon-3x"></i></button>
+                        <br>
+                        <br>
+                        <p>You said:</p>
+                        <div class="form-group">
+                            <textarea id="speech-as-text" class="text-center form-control" readonly>
+                            </textarea>
+                        </div>
+                        <br>
+                        <section id="sound-clip"></section>
+                        <br>
+                        <form method="POST" action="/prompts/topic/{{promptId}}" onsubmit="get_action(this);">
+                            <input type="hidden" id="speech-input" name="speechSubmission"></input>
+                            <button type="submit" class="btn btn-secondary hidden" id="submit-speech">Submit Response</button>
+                        </form>
+
+                         <a class="btn btn-primary btn-circle btn-circle-lg m-1" id="next">Next</a>
+                    </div>
+
+
+                </div>
+
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="user-language" value={{languageCode}}></input>
+<h5>Language: {{language}}</h5>
+
+<script src="/scripts/microphone-scripts.js"></script>
+<script src="/scripts/lesson-scripts.js"></script>

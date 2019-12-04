@@ -88,17 +88,17 @@
     git commit -m "Your commit message"
     git push origin your-name/your-feature
     ```
-- Submit a pull request: 
+- Submit a pull request:
     - Go to your branch on github and click "Compare and pull request"
     - Look over the files changed and add any necessary comments
     - Submit the request
 - Either ask someone to review it or just approve the pull request from the master branch
 
 ## Heroku & New Way to Locally Develop
-- Download Heroku CLI : 
+- Download Heroku CLI :
     - Go to https://devcenter.heroku.com/articles/heroku-cli
     - Create a Heroku account, I will add you as a collaborator and you'll be able to access my heroku repo
-- Follow instructions for local Dev: 
+- Follow instructions for local Dev:
     - https://devcenter.heroku.com/articles/heroku-local
     - Once you're connected to https://git.heroku.com/loquela-learning.git
     - You will need to change `ssl: true` on line #12 in queries.js to `ssl: false` so that the app will use your local postgres db
@@ -107,5 +107,17 @@
     ```
     heroku local
     ```
-
-
+## Google Natural Language (NL) API set-up with Heroku Local Development
+- Install NL API client library for Node.js :
+  - if the "@google-cloud/language": "^3.6.0" dependency is located in package.json, Run `npm install`
+  - Otherwise, Run `npm install --save @google-cloud/language`
+- Add config file :
+  - In the root directory, add a directory named: 'config'
+  - In this directory, insert the Google API Service Account Key (keyFile.json file I will send to your email)
+    - This key will grant any access to the NL API (from the account that was set-up) to those who hold it, Monthly FREE Quota = 5K units where 1 unit = API analysis call of < 1,000 unicode characters. https://cloud.google.com/natural-language/pricing
+- Set Heroku .env PATH:
+  - In .env file, set a new variable GOOGLE_APPLICATION_CREDENTIALS to the keyFile in the newly created config file. Example: `GOOGLE_APPLICATION_CREDENTIALS='./config/keyFile.json'`
+    - This will give you access to the Natural Language API calls
+    - That should be all to set-up! Run locally with the command `heroku local`
+- Documentation of NL API
+  - https://cloud.google.com/natural-language/docs/reference/libraries

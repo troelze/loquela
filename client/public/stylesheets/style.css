@@ -7,23 +7,21 @@
 }
 
 .round {
-    border-radius: 25%;
+  border-radius: 25%;
 }
 
-
 .hidden {
-    display: none;
+  display: none;
 }
 
 .visible {
-    display: inline-block;
+  display: inline-block;
 }
 
 #speech-as-text {
     width: 50%;
     margin: auto;
 }
-
 
 .container-lesson {
   width: 100vm;
@@ -33,29 +31,22 @@
   align-items: center;
   max-width: 80rem;
   margin : 0 auto;
-
 }
-
 
 /* HUD*/
 
 #hud {
   display: flex;
   justify-content: center;
- 
-  
-
 }
 
 .hud-prefix{
   text-align: center;
   font-size: 1.5rem;
-
 }
 
 .hud-main-text {
   text-align: center;
-
 }
 
 #progressBar {
@@ -63,18 +54,42 @@
   height: 2rem;
   border: 0.1rem solid #56a5eb;
   margin-top: 1.5rem;
-  
 }
 
 #progressBarFull {
   width: 0%;
   height: 1.9rem;
   background-color: #56a5eb;
-
 }
+
 
 #prompt {
   text-align: center;
-
 }
 
+.vertical-menu {
+  width: 100%; /* Set a width if you like */
+}
+
+.vertical-menu a {
+  background-color: #eee; /* Grey background color */
+  color: black; /* Black text color */
+  display: block; /*Make the links appear below each other*/
+  padding:12px; /* Add some padding */
+  text-decoration: none; /* Remove underline from links */
+  height: 55px;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc; /* Dark grey background on mouse-over */
+}
+
+.vertical-menu a.active {
+  background-color: royalblue; /* Add a green color to the "active/current" link */
+  color: white;
+  opacity: 75%;
+}
+
+#game {
+  width: 100%;
+}
